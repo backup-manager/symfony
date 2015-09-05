@@ -1,0 +1,83 @@
+services:
+    # Storage
+    backup_manager.config_storage:
+        class:  BackupManager\Config\Config
+        public: false
+
+    backup_manager.filesystems.awss3_filesystem:
+        class:  BackupManager\Filesystems\Awss3Filesystem
+        public: false
+
+    backup_manager.filesystems.dropbox_filesystem:
+        class:  BackupManager\Filesystems\DropboxFilesystem
+        public: false
+
+    backup_manager.filesystems.ftp_filesystem:
+        class:  BackupManager\Filesystems\FtpFilesystem
+        public: false
+
+    backup_manager.filesystems.local_filesystem:
+        class:  BackupManager\Filesystems\LocalFilesystem
+        public: false
+
+    backup_manager.filesystems.rackspace_filesystem:
+        class:  BackupManager\Filesystems\RackspaceFilesystem
+        public: false
+
+    backup_manager.filesystems.sftp_filesystem:
+        class:  BackupManager\Filesystems\SftpFilesystem
+        public: false
+
+    backup_manager.filesystems:
+        class:  BackupManager\Filesystems\FilesystemProvider
+        public: false
+        arguments: ["@backup_manager.config_storage"]
+        calls:
+            - [add, ["@backup_manager.filesystems.awss3_filesystem"]]
+            - [add, ["@backup_manager.filesystems.dropbox_filesystem"]]
+            - [add, ["@backup_manager.filesystems.ftp_filesystem"]]
+            - [add, ["@backup_manager.filesystems.local_filesystem"]]
+            - [add, ["@backup_manager.filesystems.rackspace_filesystem"]]
+            - [add, ["@backup_manager.filesystems.sftp_filesystem"]]
+
+    # Database
+    backup_manager.config_database:
+        class:  BackupManager\Config\Config
+        public: false
+
+    backup_manager.databases.mysql_database:
+        class:  BackupManager\Databases\MysqlDatabase
+        public: false
+
+    backup_manager.databases.postgresql_database:
+        class:  BackupManager\Databases\PostgresqlDatabase
+        public: false
+
+    backup_manager.databases:
+        class:  BackupManager\Databases\DatabaseProvider
+        public: false
+        arguments: ["@backup_manager.config_database"]
+        calls:
+            - [add, ["@backup_manager.databases.mysql_database"]]
+            - [add, ["@backup_manager.databases.postgresql_database"]]
+
+    # Compressor
+    backup_manager.compressors.gzip_compressor:
+        class:  BackupManager\Compressors\GzipCompressor
+        public: false
+
+    backup_manager.compressors.null_compressor:
+        class:  BackupManager\Compressors\NullCompressor
+        public: false
+
+    backup_manager.compressors:
+        class:  BackupManager\Compressors\CompressorProvider
+        public: false
+        calls:
+            - [add, ["@backup_manager.compressors.gzip_compressor"]]
+            - [add, ["@backup_manager.compressors.null_compressor"]]
+
+    # Manager
+    backup_manager:
+        class:  BackupManager\Manager
+        arguments: ["@backup_manager.filesystems", "@backup_manager.databases", "@backup_manager.compressors"]

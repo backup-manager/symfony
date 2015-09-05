@@ -1,0 +1,28 @@
+{
+    "name": "lhpalacio/backup-manager-bundle",
+    "description": "A simple database backup manager for Symfony2 with support for S3, Rackspace, Dropbox, FTP, SFTP.",
+    "keywords": ["database","backup","symfony","S3","Rackspace","Dropbox","FTP","SFTP"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luiz Henrique Gomes Palácio",
+            "email": "lhpalacio@outlook.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "symfony/dependency-injection": "~2.3",
+        "symfony/config": "~2.3",
+        "symfony/filesystem": "~2.3",
+        "symfony/class-loader": "~2.2",
+        "backup-manager/backup-manager": "^1.0",
+        "league/flysystem-aws-s3-v2": "^1.0",
+        "league/flysystem-dropbox": "^1.0",
+        "league/flysystem-rackspace": "^1.0",
+        "league/flysystem-sftp": "^1.0"
+    },
+    "autoload": {
+        "psr-4": { "lhpalacio\\BackupManagerBundle\\": "" }
+    }
+}
