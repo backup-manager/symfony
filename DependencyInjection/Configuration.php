@@ -1,6 +1,6 @@
 <?php
 
-namespace lhpalacio\BackupManagerBundle\DependencyInjection;
+namespace BM\BackupManagerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -13,7 +13,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('lhpalacio_backup_manager');
+        $rootNode = $treeBuilder->root('bm_backup_manager');
 
         $rootNode
             ->children()

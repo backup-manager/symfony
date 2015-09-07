@@ -1,14 +1,14 @@
 <?php
 
-namespace lhpalacio\BackupManagerBundle;
+namespace BM\BackupManagerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * LhpalacioBackupManagerBundle.
+ * BMBackupManagerBundle.
  *
  * @author Luiz Henrique Gomes Palácio <lhpalacio@outlook.com>
  */
-class LhpalacioBackupManagerBundle extends Bundle
+class BMBackupManagerBundle extends Bundle
 {
 }

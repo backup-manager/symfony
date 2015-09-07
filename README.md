@@ -15,7 +15,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```bash
-$ composer require lhpalacio/backup-manager-bundle "^1.0"
+$ composer require backup-manager/symfony "^1.0"
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -40,7 +40,7 @@ class AppKernel extends Kernel
         $bundles = array(
             // ...
 
-            new lhpalacio\BackupManagerBundle\LhpalacioBackupManagerBundle(),
+            new BM\BackupManagerBundle\BMBackupManagerBundle(),
         );
 
         // ...
@@ -56,7 +56,7 @@ Step 3: Configure your databases and filesystems
 ```yaml
 # app/config.yml
 
-lhpalacio_backup_manager:
+bm_backup_manager:
     database:
         development:
             type: mysql
