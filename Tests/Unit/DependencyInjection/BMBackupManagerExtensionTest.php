@@ -22,7 +22,7 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
 
     public function testReplacementOfConfig()
     {
-        $storageConfig = ['local'=>['type'=>'Local', 'root'=>'/foo']];
+        $storageConfig = ['local'=>['type'=>'local', 'root'=>'/foo']];
         $dbConfig = ['dev'=>['type'=>'mysql']];
 
         $this->load([
