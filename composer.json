@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": "^5.5 || ^7.0",
         "backup-manager/backup-manager": "^1.0",
         "league/flysystem-dropbox": "^1.0",
         "league/flysystem-rackspace": "^1.0",
