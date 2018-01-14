@@ -1,0 +1,5 @@
+services:
+
+    test.backup_manager:
+        alias: backup_manager
+        public: true

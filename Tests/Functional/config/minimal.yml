@@ -1,0 +1,13 @@
+bm_backup_manager:
+    database:
+        development:
+            type: mysql
+            host: localhost
+            port: 3306
+            user: root
+            pass: password
+            database: test
+    storage:
+        local:
+            type: Local
+            root: /path/to/working/directory
