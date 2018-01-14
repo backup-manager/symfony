@@ -1,6 +1,11 @@
 BackupManagerBundle
 ===================
 
+[![Latest Stable Version](https://poser.pugx.org/backup-manager/symfony/version.png)](https://packagist.org/packages/backup-manager/symfony)
+[![License](https://poser.pugx.org/backup-manager/symfony/license.png)](https://packagist.org/packages/backup-manager/symfony)
+[![Build Status](https://travis-ci.org/backup-manager/symfony.svg?branch=master)](https://travis-ci.org/backup-manager/symfony)
+[![Total Downloads](https://poser.pugx.org/backup-manager/symfony/downloads.png)](https://packagist.org/packages/backup-manager/symfony)
+
 A simple database backup manager for Symfony2 with support for S3, Rackspace, Dropbox, FTP, SFTP.
 
 This package pulls in the framework agnostic [Backup Manager](https://github.com/backup-manager/backup-manager) and provides seamless integration with **Symfony**. 
