@@ -12,18 +12,26 @@
     ],
     "require": {
         "php": "^5.5 || ^7.0",
-        "symfony/dependency-injection": "^2.7 || ^3.1 || ^4.0",
-        "symfony/http-kernel": "^2.7 || ^3.0 || ^4.0",
-        "symfony/config": "^2.7 || ^3.1 || ^4.0",
-        "symfony/filesystem": "^2.7 || ^3.1 || ^4.0",
         "backup-manager/backup-manager": "^1.0",
-        "league/flysystem-aws-s3-v2": "^1.0",
         "league/flysystem-dropbox": "^1.0",
         "league/flysystem-rackspace": "^1.0",
-        "league/flysystem-sftp": "^1.0"
+        "league/flysystem-sftp": "^1.0",
+        "symfony/config": "^2.7 || ^3.1 || ^4.0",
+        "symfony/dependency-injection": "^2.7 || ^3.1 || ^4.0",
+        "symfony/filesystem": "^2.7 || ^3.1 || ^4.0",
+        "symfony/framework-bundle": "^2.7 || ^3.0 || ^4.0",
+        "symfony/http-kernel": "^2.7 || ^3.0 || ^4.0",
+        "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
     },
     "require-dev": {
+        "matthiasnoback/symfony-dependency-injection-test": "^1.2 || ^2.3",
+        "matthiasnoback/symfony-config-test": "^2.2 || ^3.1",
+        "nyholm/symfony-bundle-test": "^1.2",
         "symfony/phpunit-bridge": "^3.4 || ^4.0"
+    },
+    "suggest": {
+        "league/flysystem-aws-s3-v2": "to use AWS S3, version 2 (compatible with other vendors like Google Cloud Storage or ExoScale)",
+        "league/flysystem-aws-s3-v3": "to use AWS S3, version 3 (compatible with newer aws-regions like Frankfurt/Europe)"
     },
     "autoload": {
         "psr-4": { "BM\\BackupManagerBundle\\": "" }

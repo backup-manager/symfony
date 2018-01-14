@@ -16,6 +16,7 @@ env:
 branches:
     except:
         - /^analysis-.*$/
+        - /^patch-.*$/
 
 matrix:
     fast_finish: true
@@ -51,6 +52,7 @@ matrix:
     allow_failures:
           # dev stability is allowed to fail.
         - env: STABILITY="dev"
+        - env: DEPENDENCIES="dunglas/symfony-lock:^4"
 
 before_install:
     - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
