@@ -25,6 +25,8 @@
         "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
     },
     "require-dev": {
+        "matthiasnoback/symfony-dependency-injection-test": "^1.2 || ^2.3",
+        "matthiasnoback/symfony-config-test": "^2.2 || ^3.1",
         "nyholm/symfony-bundle-test": "^1.2",
         "symfony/phpunit-bridge": "^3.4 || ^4.0"
     },
