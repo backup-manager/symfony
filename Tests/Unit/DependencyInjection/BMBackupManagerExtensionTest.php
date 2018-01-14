@@ -20,22 +20,33 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    /**
-     * @test
-     */
     public function testReplacementOfConfig()
     {
-        $storageConfig = ['local'=>['type'=>'local']];
+        $storageConfig = ['local'=>['type'=>'Local', 'root'=>'/foo']];
         $dbConfig = ['dev'=>['type'=>'mysql']];
 
-        $this->load(
-            [
-                'storage' => $storageConfig,
-                'database' => $dbConfig,
-            ]
-        );
+        $this->load([
+            'storage' => $storageConfig,
+            'database' => $dbConfig,
+        ]);
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('backup_manager.config_storage', 0, $storageConfig);
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('backup_manager.config_database', 0, $dbConfig);
+    }
+
+    /**
+     * Make sure we can have multiple storage names with the same type
+     */
+    public function testCustomConfigNames()
+    {
+        $storageConfig = ['foobar'=>['type'=>'Ftp', 'host' => 'foo', 'port' => 21, 'passive'=>true, 'password' =>'xx', 'root'=>'ss', 'ssl'=>true, 'timeout'=>10, 'username'=>'x']];
+        $dbConfig = ['dev'=>['type'=>'mysql']];
+
+        $this->load([
+            'storage' => $storageConfig,
+            'database' => $dbConfig,
+        ]);
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('backup_manager.config_storage', 0, $storageConfig);
     }
 }
