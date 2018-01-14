@@ -16,6 +16,7 @@ env:
 branches:
     except:
         - /^analysis-.*$/
+        - /^patch-.*$/
 
 matrix:
     fast_finish: true
