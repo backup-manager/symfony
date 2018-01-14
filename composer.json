@@ -16,7 +16,6 @@
         "symfony/http-kernel": "^2.7 || ^3.0 || ^4.0",
         "symfony/config": "^2.7 || ^3.1 || ^4.0",
         "symfony/filesystem": "^2.7 || ^3.1 || ^4.0",
-        "symfony/class-loader": "^2.7 || ^3.1 || ^4.0",
         "backup-manager/backup-manager": "^1.0",
         "league/flysystem-aws-s3-v2": "^1.0",
         "league/flysystem-dropbox": "^1.0",
