@@ -10,8 +10,14 @@ use BackupManager\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Backup database.
+ *
+ * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ */
 class BackupCommand extends Command
 {
     protected static $defaultName = 'backup-manager:backup';
@@ -22,26 +28,19 @@ class BackupCommand extends Command
     private $manager;
 
     /**
-     * @var Config
+     * @var string
      */
-    private $storageConfig;
-
-    /**
-     * @var FilesystemProvider
-     */
-    private $filesystemProvider;
+    private $filePrefix;
 
     /**
      *
      * @param Manager $manager
-     * @param Config $config
-     * @param FilesystemProvider $fp
+     * @param string $filePrefix
      */
-    public function __construct(Manager $manager, Config $config, FilesystemProvider $fp)
+    public function __construct(Manager $manager, $filePrefix)
     {
         $this->manager = $manager;
-        $this->storageConfig = $config;
-        $this->filesystemProvider = $fp;
+        $this->filePrefix = $filePrefix;
         parent::__construct();
     }
 
@@ -49,40 +48,25 @@ class BackupCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('backup-manager:backup')
             ->setDescription('Starts a new backup.')
             ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to backup?')
             ->addArgument('destinations', InputArgument::IS_ARRAY, 'What storages do you want to upload the backup to?')
-            ->addArgument('compression', InputArgument::OPTIONAL, 'How do you want to compress the file?', 'gzip')
+            ->addOption('compression', 'c', InputOption::VALUE_OPTIONAL, 'How do you want to compress the file?', 'null')
+            ->addOption('filename', 'name', InputOption::VALUE_OPTIONAL, 'A customized filename', null)
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $destinations = $this->getDestinationsFromArray($input->getArgument('destinations'));
-
-        $this->manager->makeBackup()->run($input->getArgument('database'), $destinations, $input->getArgument('compression'));
-    }
-
-    /**
-     * Get Destination classes.
-     *
-     * @param array $input
-     * @return array
-     * @throws \BackupManager\Config\ConfigFieldNotFound
-     * @throws \BackupManager\Config\ConfigNotFoundForConnection
-     * @throws \BackupManager\Filesystems\FilesystemTypeNotSupported
-     */
-    private function getDestinationsFromArray(array $input)
-    {
-        $destinations = [];
-
-        foreach ($input as $name) {
-            $config = $this->storageConfig->get($name);
-            $path = isset($config['root']) ? $config['root'] : $config['container'];
-            $destinations[] = new Destination($this->filesystemProvider->get($name), $path);
+        if (null === $filename = $input->getOption('filename')) {
+            $filename = $this->filePrefix.(new \DateTime())->format('Y-m-d_H-i-s');
         }
 
-        return $destinations;
+        $destinations = [];
+        foreach ($input->getArgument('destinations') as $name) {
+            $destinations[] = new Destination($name, $filename);
+        }
+
+        $this->manager->makeBackup()->run($input->getArgument('database'), $destinations, $input->getOption('compression'));
     }
 }

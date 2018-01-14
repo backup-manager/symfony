@@ -131,7 +131,11 @@ Backup to / restore from any configured database.
 Backup the development database to `Amazon S3`. The S3 backup path will be `test/backup.sql.gz` in the end, when `gzip` is done with it.
 
 ```php
-$this->container->get('backup_manager')->makeBackup()->run('development', 's3', 'test/backup.sql', 'gzip');
+$this->container->get('backup_manager')->makeBackup()->run('development', [new Destination('s3', 'test/backup.sql')], 'gzip');
+```
+
+```bash
+php bin/console backup-manager:backup development s3 -c gzip --filename test/backup.sql
 ```
 
 Backup to / restore from any configured filesystem.
@@ -141,6 +145,10 @@ Restore the database file `test/backup.sql.gz` from `Amazon S3` to the `developm
 
 ```php
 $this->container->get('backup_manager')->makeRestore()->run('s3', 'test/backup.sql.gz', 'development', 'gzip');
+```
+
+```bash
+php bin/console backup-manager:backup development s3 test/backup.sql.gz -c gzip 
 ```
 
 > This package does not allow you to backup from one database type and restore to another. A MySQL dump is not compatible with PostgreSQL.
