@@ -1,0 +1,15 @@
+bm_backup_manager:
+    database:
+        development:
+            type: mysql
+            host: localhost
+            port: 3306
+            user: root
+            pass: password
+            database: test
+    storage:
+        rackspace:
+            type: Rackspace
+            username: 'xx'
+            password: 'yy'
+            container: 'zz'
