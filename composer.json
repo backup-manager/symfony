@@ -21,12 +21,12 @@
         "symfony/dependency-injection": "^2.7 || ^3.1 || ^4.0",
         "symfony/filesystem": "^2.7 || ^3.1 || ^4.0",
         "symfony/framework-bundle": "^2.7 || ^3.0 || ^4.0",
-        "symfony/http-kernel": "^2.7 || ^3.0 || ^4.0"
+        "symfony/http-kernel": "^2.7 || ^3.0 || ^4.0",
+        "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
     },
     "require-dev": {
         "nyholm/symfony-bundle-test": "^1.2",
-        "symfony/phpunit-bridge": "^3.4 || ^4.0",
-        "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
+        "symfony/phpunit-bridge": "^3.4 || ^4.0"
     },
     "autoload": {
         "psr-4": { "BM\\BackupManagerBundle\\": "" }
