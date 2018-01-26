@@ -47,6 +47,11 @@ class BMBackupManagerExtension extends Extension
 
         $container->getDefinition('backup_manager.config_database')
             ->replaceArgument(0, $config['database']);
+
+        if (isset($config['output_file_prefix'])) {
+            $container->getDefinition('backup_manager.command.backup')
+                ->replaceArgument(1, $config['output_file_prefix']);
+        }
     }
 
     /**

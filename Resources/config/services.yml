@@ -1,4 +1,19 @@
 services:
+    # Commands
+    backup_manager.command.backup:
+        class: BM\BackupManagerBundle\Command\BackupCommand
+        public: false
+        arguments: ['@backup_manager', '']
+        tags:
+            - { name: 'console.command' }
+
+    backup_manager.command.restore:
+        class: BM\BackupManagerBundle\Command\RestoreCommand
+        public: false
+        arguments: ['@backup_manager']
+        tags:
+            - { name: 'console.command' }
+
     # Storage
     backup_manager.config_storage:
         class:  BackupManager\Config\Config

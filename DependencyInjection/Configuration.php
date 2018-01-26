@@ -71,6 +71,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->scalarNode('output_file_prefix')->info('Use as a prefix for default backup filename')->end()
             ->end()
         ;
 
