@@ -148,7 +148,7 @@ $this->container->get('backup_manager')->makeRestore()->run('s3', 'test/backup.s
 ```
 
 ```bash
-php bin/console backup-manager:backup development s3 --filename test/backup.sql -c gzip 
+php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip 
 ```
 
 > This package does not allow you to backup from one database type and restore to another. A MySQL dump is not compatible with PostgreSQL.
