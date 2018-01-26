@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "backup-manager/backup-manager": "^1.0",
+        "php": "^5.5 || ^7.0",
+        "backup-manager/backup-manager": "^1.2",
         "symfony/config": "^2.7 || ^3.1 || ^4.0",
         "symfony/dependency-injection": "^2.7 || ^3.1 || ^4.0",
         "symfony/filesystem": "^2.7 || ^3.1 || ^4.0",
@@ -21,6 +21,8 @@
         "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
     },
     "require-dev": {
+        "matthiasnoback/symfony-dependency-injection-test": "^1.2 || ^2.3",
+        "matthiasnoback/symfony-config-test": "^2.2 || ^3.1",
         "nyholm/symfony-bundle-test": "^1.2",
         "symfony/phpunit-bridge": "^3.4 || ^4.0"
     },

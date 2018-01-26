@@ -43,10 +43,10 @@ class BMBackupManagerExtension extends Extension
         }
 
         $container->getDefinition('backup_manager.config_storage')
-            ->addArgument($config['storage']);
+            ->replaceArgument(0, $config['storage']);
 
         $container->getDefinition('backup_manager.config_database')
-            ->addArgument($config['database']);
+            ->replaceArgument(0, $config['database']);
     }
 
     /**

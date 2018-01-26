@@ -2,6 +2,7 @@ services:
     # Storage
     backup_manager.config_storage:
         class:  BackupManager\Config\Config
+        arguments: [[]]
         public: false
 
     backup_manager.filesystems.awss3_filesystem:
@@ -36,6 +37,7 @@ services:
     # Database
     backup_manager.config_database:
         class:  BackupManager\Config\Config
+        arguments: [[]]
         public: false
 
     backup_manager.databases.mysql_database:
