@@ -13,9 +13,6 @@
     "require": {
         "php": "^5.5 || ^7.0",
         "backup-manager/backup-manager": "^1.2",
-        "league/flysystem-dropbox": "^1.0",
-        "league/flysystem-rackspace": "^1.0",
-        "league/flysystem-sftp": "^1.0",
         "symfony/config": "^2.7 || ^3.1 || ^4.0",
         "symfony/dependency-injection": "^2.7 || ^3.1 || ^4.0",
         "symfony/filesystem": "^2.7 || ^3.1 || ^4.0",
@@ -30,8 +27,10 @@
         "symfony/phpunit-bridge": "^3.4 || ^4.0"
     },
     "suggest": {
-        "league/flysystem-aws-s3-v2": "to use AWS S3, version 2 (compatible with other vendors like Google Cloud Storage or ExoScale)",
-        "league/flysystem-aws-s3-v3": "to use AWS S3, version 3 (compatible with newer aws-regions like Frankfurt/Europe)"
+        "league/flysystem-aws-s3-v3": "To use AWS S3, version 3",
+        "league/flysystem-dropbox": "To use Dropbox",
+        "league/flysystem-rackspace": "To use Rackspace",
+        "league/flysystem-sftp": "To use sftp"
     },
     "autoload": {
         "psr-4": { "BM\\BackupManagerBundle\\": "" }

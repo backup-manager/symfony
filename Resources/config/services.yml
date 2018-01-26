@@ -33,13 +33,6 @@ services:
         class:  BackupManager\Filesystems\FilesystemProvider
         public: false
         arguments: ["@backup_manager.config_storage"]
-        calls:
-            - [add, ["@backup_manager.filesystems.awss3_filesystem"]]
-            - [add, ["@backup_manager.filesystems.dropbox_filesystem"]]
-            - [add, ["@backup_manager.filesystems.ftp_filesystem"]]
-            - [add, ["@backup_manager.filesystems.local_filesystem"]]
-            - [add, ["@backup_manager.filesystems.rackspace_filesystem"]]
-            - [add, ["@backup_manager.filesystems.sftp_filesystem"]]
 
     # Database
     backup_manager.config_database:
