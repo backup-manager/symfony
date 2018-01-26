@@ -4,6 +4,7 @@ namespace BM\BackupManagerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class Configuration implements ConfigurationInterface
 {
@@ -17,70 +18,47 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('storage')->isRequired()
-                    ->children()
-                        ->arrayNode('local')
-                            ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('root')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('s3')
-                            ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('key')->end()
-                                ->scalarNode('secret')->end()
-                                ->scalarNode('region')->end()
-                                ->scalarNode('version')->end()
-                                ->scalarNode('bucket')->end()
-                                ->scalarNode('root')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('rackspace')
-                            ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('username')->end()
-                                ->scalarNode('password')->end()
-                                ->scalarNode('container')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('dropbox')
-                            ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('token')->end()
-                                ->scalarNode('key')->end()
-                                ->scalarNode('secret')->end()
-                                ->scalarNode('app')->end()
-                                ->scalarNode('root')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('ftp')
-                            ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('host')->end()
-                                ->scalarNode('username')->end()
-                                ->scalarNode('password')->end()
-                                ->scalarNode('root')->end()
-                                ->scalarNode('port')->end()
-                                ->scalarNode('passive')->end()
-                                ->scalarNode('ssl')->end()
-                                ->scalarNode('timeout')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('sftp')
-                            ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('host')->end()
-                                ->scalarNode('username')->end()
-                                ->scalarNode('password')->end()
-                                ->scalarNode('root')->end()
-                                ->scalarNode('port')->end()
-                                ->scalarNode('timeout')->end()
-                                ->scalarNode('privateKey')->end()
-                            ->end()
-                        ->end()
+                ->variableNode('storage')
+                    ->validate()
+                        ->always()
+                        ->then(function ($storageConfig) {
+                            foreach ($storageConfig as $name => $config) {
+                                if (!isset($config['type'])) {
+                                    throw new InvalidConfigurationException(sprintf('You must define a "type" for storage "%s"', $name));
+                                }
+                                $validTypes = ['Local', 'AwsS3', 'Rackspace', 'Dropbox', 'Ftp', 'Sftp'];
+                                if (!in_array($config['type'], $validTypes)) {
+                                    throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
+                                }
+
+                                switch ($config['type']) {
+                                    case 'Local':
+                                        $this->validateAuthenticationType(['root'], $config, 'Local');
+                                        break;
+                                    case 'AwsS3':
+                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root'], $config, 'AwsS3');
+                                        break;
+                                    case 'Rackspace':
+                                        $this->validateAuthenticationType(['username', 'password', 'container'], $config, 'Rackspace');
+                                        break;
+                                    case 'Dropbox':
+                                        $this->validateAuthenticationType(['token', 'key', 'secret', 'app', 'root'], $config, 'Dropbox');
+                                        break;
+                                    case 'Ftp':
+                                        $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'passive', 'ssl', 'timeout'], $config, 'Ftp');
+                                        break;
+                                    case 'Sftp':
+                                        $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'], $config, 'Sftp');
+                                        break;
+                                }
+                            }
+
+                            return $storageConfig;
+                        })
                     ->end()
-                ->end()
+
+                ->end() // End storage
+
                 ->arrayNode('database')->isRequired()
                     ->prototype('array')
                         ->children()
@@ -97,5 +75,31 @@ class Configuration implements ConfigurationInterface
         ;
 
         return $treeBuilder;
+    }
+
+    /**
+     * Validate that the configuration fragment has the specified keys and none other.
+     *
+     * @param array  $expected Fields that must exist
+     * @param array  $actual   Actual configuration hashmap
+     * @param string $typeName Name of storage type for error messages
+     *
+     * @throws InvalidConfigurationException If $actual does not have exactly the keys specified in $expected (plus 'type')
+     */
+    private function validateAuthenticationType(array $expected, array $actual, $typeName)
+    {
+        unset($actual['type']);
+        $actual = array_keys($actual);
+
+        if (empty(array_diff($actual, $expected))) {
+            return;
+        }
+
+        throw new InvalidConfigurationException(sprintf(
+            'Storage type "%s" has valid keys "%s" but got "%s"',
+            $typeName,
+            implode(', ', $expected),
+            implode(', ', $actual)
+        ));
     }
 }
