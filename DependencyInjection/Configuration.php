@@ -70,6 +70,16 @@ class Configuration implements ConfigurationInterface
                         })
                         ->thenInvalid('Key "ignore_table" is only valid on MySQL databases.')
                     ->end()
+                    ->validate()
+                        ->always(function ($databases) {
+                            foreach ($databases as &$database) {
+                                if (empty($database['ignoreTables'])) {
+                                    unset($database['ignoreTables']);
+                                }
+                            }
+                            return $databases;
+                        })
+                    ->end()
                     ->prototype('array')
                         ->children()
                             ->scalarNode('type')->end()
@@ -78,7 +88,9 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('user')->end()
                             ->scalarNode('pass')->end()
                             ->scalarNode('database')->end()
-                            ->arrayNode('ignoreTables')->scalarPrototype()->end()->end()
+                            ->arrayNode('ignoreTables')
+                                ->scalarPrototype()->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
