@@ -95,7 +95,7 @@ bm_backup_manager:
             password:
             container:
         dropbox:
-            type: Dropbox
+            type: DropboxV2
             token:
             key:
             secret:

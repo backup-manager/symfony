@@ -29,7 +29,7 @@
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "To use AWS S3, version 3",
-        "league/flysystem-dropbox": "To use Dropbox",
+        "srmklive/flysystem-dropbox-v2": "To use Dropbox",
         "league/flysystem-rackspace": "To use Rackspace",
         "league/flysystem-sftp": "To use sftp"
     },
