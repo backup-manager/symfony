@@ -70,6 +70,7 @@ bm_backup_manager:
             user: root
             pass: password
             database: test
+            ignoreTables: ['foo', 'bar']
         production:
             type: postgresql
             host: localhost
