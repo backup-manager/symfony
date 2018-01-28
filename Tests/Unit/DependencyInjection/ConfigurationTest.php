@@ -33,7 +33,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'Key "ignore_table" is only valid on MySQL databases.'
+            'Key "ignoreTables" is only valid on MySQL databases.'
         );
     }
 

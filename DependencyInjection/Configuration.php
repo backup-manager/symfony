@@ -68,7 +68,7 @@ class Configuration implements ConfigurationInterface
 
                             return !$valid;
                         })
-                        ->thenInvalid('Key "ignore_table" is only valid on MySQL databases.')
+                        ->thenInvalid('Key "ignoreTables" is only valid on MySQL databases.')
                     ->end()
                     ->validate()
                         ->always(function ($databases) {
