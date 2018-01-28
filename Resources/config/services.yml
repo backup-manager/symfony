@@ -28,6 +28,10 @@ services:
         class:  BackupManager\Filesystems\DropboxFilesystem
         public: false
 
+    backup_manager.filesystems.dropbox_v2_filesystem:
+        class:  BackupManager\Filesystems\DropboxV2Filesystem
+        public: false
+
     backup_manager.filesystems.ftp_filesystem:
         class:  BackupManager\Filesystems\FtpFilesystem
         public: false

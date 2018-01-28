@@ -5,9 +5,10 @@ namespace BM\BackupManagerBundle\DependencyInjection;
 use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use Srmklive\Dropbox\Adapter\DropboxAdapter;
+use Srmklive\Dropbox\Adapter\DropboxAdapter as Dropbox2Adapter;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Sftp\SftpAdapter;
+use League\Flysystem\Dropbox\DropboxAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -33,6 +34,7 @@ class BMBackupManagerExtension extends Extension
             'AwsS3' => 'backup_manager.filesystems.awss3_filesystem',
             'Rackspace' => 'backup_manager.filesystems.rackspace_filesystem',
             'Dropbox' => 'backup_manager.filesystems.dropbox_filesystem',
+            'DropboxV2' => 'backup_manager.filesystems.dropbox_v2_filesystem',
             'Ftp' => 'backup_manager.filesystems.ftp_filesystem',
             'Sftp' => 'backup_manager.filesystems.sftp_filesystem',
         ];
@@ -64,7 +66,8 @@ class BMBackupManagerExtension extends Extension
             'Local' => ['package'=>'league/flysystem:^1.0', 'test'=>Local::class],
             'AwsS3' => ['package'=>'league/flysystem-aws-s3-v3:^1.0', 'test'=>AwsS3Adapter::class],
             'Rackspace' => ['package'=>'league/flysystem-rackspace:^1.0', 'test'=>RackspaceAdapter::class],
-            'Dropbox' => ['package'=>'srmklive/flysystem-dropbox-v2:^1.0', 'test'=>DropboxAdapter::class],
+            'Dropbox' => ['package'=>'league/flysystem-dropbox:^1.0', 'test'=>DropboxAdapter::class],
+            'DropboxV2' => ['package'=>'srmklive/flysystem-dropbox-v2:^1.0', 'test'=>Dropbox2Adapter::class],
             'Ftp' => ['package'=>'league/flysystem:^1.0', 'test'=>Ftp::class],
             'Sftp' => ['package'=>'league/flysystem-sftp:^1.0', 'test'=>SftpAdapter::class],
         ];
