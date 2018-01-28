@@ -20,8 +20,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->variableNode('storage')
                     ->validate()
-                        ->always()
-                        ->then(function ($storageConfig) {
+                        ->always(function ($storageConfig) {
                             foreach ($storageConfig as $name => $config) {
                                 if (!isset($config['type'])) {
                                     throw new InvalidConfigurationException(sprintf('You must define a "type" for storage "%s"', $name));
@@ -60,6 +59,26 @@ class Configuration implements ConfigurationInterface
                 ->end() // End storage
 
                 ->arrayNode('database')->isRequired()
+                    ->validate()
+                        ->ifTrue(function ($database) {
+                            return $database['type'] !== 'mysql' && !empty($database['ignore_tables']);
+                        })
+                        ->thenInvalid('Key "ignore_table" is only valid on MySQL databases.')
+                    ->end()
+                    ->beforeNormalization()
+                        ->always(function ($config) {
+                            // Support both yaml and xml
+                            $keys = ['ignore_tables', 'ignore-tables'];
+                            foreach ($keys as $key) {
+                                if (isset($config[$key])) {
+                                    $config['ignoreTables'] = $config[$key];
+                                    unset($config[$key]);
+                                }
+                            }
+
+                            return $config;
+                        })
+                    ->end()
                     ->prototype('array')
                         ->children()
                             ->scalarNode('type')->end()
@@ -68,6 +87,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('user')->end()
                             ->scalarNode('pass')->end()
                             ->scalarNode('database')->end()
+                            ->arrayNode('ignore_tables')->beforeNormalization()->castToArray()->end()->end()
                         ->end()
                     ->end()
                 ->end()
