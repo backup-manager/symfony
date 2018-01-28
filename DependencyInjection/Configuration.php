@@ -60,24 +60,15 @@ class Configuration implements ConfigurationInterface
 
                 ->arrayNode('database')->isRequired()
                     ->validate()
-                        ->ifTrue(function ($database) {
-                            return $database['type'] !== 'mysql' && !empty($database['ignore_tables']);
-                        })
-                        ->thenInvalid('Key "ignore_table" is only valid on MySQL databases.')
-                    ->end()
-                    ->beforeNormalization()
-                        ->always(function ($config) {
-                            // Support both yaml and xml
-                            $keys = ['ignore_tables', 'ignore-tables'];
-                            foreach ($keys as $key) {
-                                if (isset($config[$key])) {
-                                    $config['ignoreTables'] = $config[$key];
-                                    unset($config[$key]);
-                                }
+                        ->ifTrue(function ($databases) {
+                            $valid = true;
+                            foreach ($databases as $database) {
+                                $valid = $valid && (empty($database['ignoreTables']) || $database['type'] === 'mysql');
                             }
 
-                            return $config;
+                            return !$valid;
                         })
+                        ->thenInvalid('Key "ignore_table" is only valid on MySQL databases.')
                     ->end()
                     ->prototype('array')
                         ->children()
@@ -87,7 +78,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('user')->end()
                             ->scalarNode('pass')->end()
                             ->scalarNode('database')->end()
-                            ->arrayNode('ignore_tables')->beforeNormalization()->castToArray()->end()->end()
+                            ->arrayNode('ignoreTables')->scalarPrototype()->end()->end()
                         ->end()
                     ->end()
                 ->end()

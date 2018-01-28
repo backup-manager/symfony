@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BM\BackupManagerBundle\Tests\Unit\DependencyInjection;
 
 use BM\BackupManagerBundle\DependencyInjection\BMBackupManagerExtension;
@@ -22,7 +21,7 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
 
     public function testReplacementOfConfig()
     {
-        $storageConfig = ['local'=>['type'=>'local', 'root'=>'/foo']];
+        $storageConfig = ['local'=>['type'=>'Local', 'root'=>'/foo']];
         $dbConfig = ['dev'=>['type'=>'mysql']];
 
         $this->load([
