@@ -65,13 +65,13 @@ class Configuration implements ConfigurationInterface
                             foreach ($databases as $d) {
                                 if ($d['type'] !== 'mysql') {
                                     // If not "mysql" we have to make sure these parameter are set to default
-                                    $valid = $valid && empty($d['ignoreTables']) && !$d['ssl'] && !$d['singleTransaction'];
+                                    $valid = $valid && empty($d['ignoreTables']) && empty($d['ssl']) && empty($d['singleTransaction']);
                                 }
                             }
 
                             return !$valid;
                         })
-                        ->thenInvalid('Key "ignoreTables" is only valid on MySQL databases.')
+                        ->thenInvalid('Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.')
                     ->end()
                     ->validate()
                         ->always(function ($databases) {

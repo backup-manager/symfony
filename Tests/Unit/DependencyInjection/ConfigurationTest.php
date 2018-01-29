@@ -33,7 +33,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'Key "ignoreTables" is only valid on MySQL databases.'
+            'Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.'
         );
     }
 
@@ -69,7 +69,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'Key "ignoreTables" is only valid on MySQL databases.'
+            'Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.'
         );
     }
 
@@ -81,7 +81,7 @@ class ConfigurationTest extends TestCase
                         'dev'=>[
                             'type' => 'foo',
                         ],
-                        'dev2'=>[
+                        'test'=>[
                             'type' => 'bar',
                             'ssl' => false,
                         ],
@@ -110,7 +110,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'Key "ignoreTables" is only valid on MySQL databases.'
+            'Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.'
         );
     }
 
@@ -122,7 +122,7 @@ class ConfigurationTest extends TestCase
                         'dev'=>[
                             'type' => 'foo',
                         ],
-                        'dev2'=>[
+                        'test'=>[
                             'type' => 'bar',
                             'singleTransaction' => false,
                         ],
