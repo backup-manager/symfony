@@ -33,7 +33,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'Key "ignoreTables" is only valid on MySQL databases.'
+            'Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.'
         );
     }
 
@@ -44,6 +44,87 @@ class ConfigurationTest extends TestCase
                     'database'=>[
                         'dev'=>[
                             'type' => 'foo',
+                        ],
+                        'prod'=>[
+                            'type' => 'mysql',
+                        ],
+                    ],
+                ]
+            )
+        );
+    }
+
+    public function testSslGeneratesErrorWhenNotUsingMySQL()
+    {
+        $this->assertConfigurationIsInvalid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+                            'type' => 'foo',
+                            'ssl' => true,
+                        ],
+                        'prod'=>[
+                            'type' => 'mysql',
+                        ],
+                    ],
+                ]
+            ),
+            'Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.'
+        );
+    }
+
+    public function testSslOnValid()
+    {
+        $this->assertConfigurationIsValid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+                            'type' => 'foo',
+                        ],
+                        'test'=>[
+                            'type' => 'bar',
+                            'ssl' => false,
+                        ],
+                        'prod'=>[
+                            'type' => 'mysql',
+                            'ssl' => true,
+                        ],
+                    ],
+                ]
+            )
+        );
+    }
+
+    public function testSingleTransactionGeneratesErrorWhenNotUsingMySQL()
+    {
+        $this->assertConfigurationIsInvalid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+                            'type' => 'foo',
+                            'singleTransaction' => true,
+                        ],
+                        'prod'=>[
+                            'type' => 'mysql',
+                        ],
+                    ],
+                ]
+            ),
+            'Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.'
+        );
+    }
+
+    public function testSingleTransactionOnValid()
+    {
+        $this->assertConfigurationIsValid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+                            'type' => 'foo',
+                        ],
+                        'test'=>[
+                            'type' => 'bar',
+                            'singleTransaction' => false,
                         ],
                         'prod'=>[
                             'type' => 'mysql',

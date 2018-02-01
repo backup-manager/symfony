@@ -62,13 +62,16 @@ class Configuration implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(function ($databases) {
                             $valid = true;
-                            foreach ($databases as $database) {
-                                $valid = $valid && (empty($database['ignoreTables']) || $database['type'] === 'mysql');
+                            foreach ($databases as $d) {
+                                if ($d['type'] !== 'mysql') {
+                                    // If not "mysql" we have to make sure these parameter are set to default
+                                    $valid = $valid && empty($d['ignoreTables']) && empty($d['ssl']) && empty($d['singleTransaction']);
+                                }
                             }
 
                             return !$valid;
                         })
-                        ->thenInvalid('Key "ignoreTables" is only valid on MySQL databases.')
+                        ->thenInvalid('Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.')
                     ->end()
                     ->validate()
                         ->always(function ($databases) {
@@ -88,6 +91,8 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('user')->end()
                             ->scalarNode('pass')->end()
                             ->scalarNode('database')->end()
+                            ->booleanNode('singleTransaction')->end()
+                            ->booleanNode('ssl')->end()
                             ->arrayNode('ignoreTables')
                                 ->scalarPrototype()->end()
                             ->end()
