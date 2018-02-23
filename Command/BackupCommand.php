@@ -48,6 +48,7 @@ class BackupCommand extends Command
     protected function configure()
     {
         $this
+            ->setName(self::$defaultName)
             ->setDescription('Starts a new backup.')
             ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to backup?')
             ->addArgument('destinations', InputArgument::IS_ARRAY, 'What storages do you want to upload the backup to?')
