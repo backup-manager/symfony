@@ -41,6 +41,7 @@ class RestoreCommand extends Command
     protected function configure()
     {
         $this
+            ->setName(self::$defaultName)
             ->setDescription('Restore form backup.')
             ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to backup?')
             ->addArgument('destination', InputArgument::REQUIRED, 'What storage do you want to restore from?')
