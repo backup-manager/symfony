@@ -94,7 +94,7 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('singleTransaction')->end()
                             ->booleanNode('ssl')->end()
                             ->arrayNode('ignoreTables')
-                                ->scalarPrototype()->end()
+                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()
                     ->end()
