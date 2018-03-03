@@ -6,6 +6,7 @@ use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Dropbox\DropboxAdapter;
+use Nyholm\DSN;
 use Srmklive\Dropbox\Adapter\DropboxAdapter as Dropbox2Adapter;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Sftp\SftpAdapter;
@@ -30,6 +31,7 @@ class BMBackupManagerExtension extends Extension
         $config['storage'] = isset($config['storage']) ? $config['storage'] : [];
         $config['database'] = isset($config['database']) ? $config['database'] : [];
         $this->validateStorage($config['storage']);
+        $config['database'] = $this->parseDsn($config['database']);
 
         $managerIdMap = [
             'Local' => 'backup_manager.filesystems.local_filesystem',
@@ -74,11 +76,35 @@ class BMBackupManagerExtension extends Extension
             'Sftp' => ['package'=>'league/flysystem-sftp:^1.0', 'test'=>SftpAdapter::class],
         ];
 
-        foreach ($config as $key=>$storageConfig) {
+        foreach ($config as $key => $storageConfig) {
             $type = $storageConfig['type'];
             if (!class_exists($requirements[$type]['test'])) {
                 throw new \LogicException(sprintf('To use the configuration key "%s" in "bm_backup_manager.stroage.%s.type" you need to install "%s"', $type, $key, $requirements[$type]['package']));
             }
         }
+    }
+
+    /**
+     * If a DSN is configured, then let it override other database storages.
+     * @param array $config
+     *
+     * @param array
+     */
+    private function parseDsn(array $config)
+    {
+        foreach ($config as $key => $databaseConfig) {
+            if (isset($databaseConfig['dsn'])) {
+                $dsn = new DSN($databaseConfig['dsn']);
+                $config[$key]['type'] = $dsn->getProtocol();
+                $config[$key]['host'] = $dsn->getFirstHost();
+                $config[$key]['port'] = $dsn->getFirstPort();
+                $config[$key]['user'] = $dsn->getUsername();
+                $config[$key]['pass'] = $dsn->getPassword();
+                $config[$key]['database'] = $dsn->getDatabase();
+                unset($config[$key]['dsn']);
+            }
+        }
+
+        return $config;
     }
 }

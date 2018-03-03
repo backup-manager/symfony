@@ -91,6 +91,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('user')->end()
                             ->scalarNode('pass')->end()
                             ->scalarNode('database')->end()
+                            ->scalarNode('dsn')->end()
                             ->booleanNode('singleTransaction')->end()
                             ->booleanNode('ssl')->end()
                             ->arrayNode('ignoreTables')
