@@ -2,14 +2,12 @@ services:
     # Commands
     backup_manager.command.backup:
         class: BM\BackupManagerBundle\Command\BackupCommand
-        public: false
         arguments: ['@backup_manager', '']
         tags:
             - { name: 'console.command' }
 
     backup_manager.command.restore:
         class: BM\BackupManagerBundle\Command\RestoreCommand
-        public: false
         arguments: ['@backup_manager']
         tags:
             - { name: 'console.command' }
