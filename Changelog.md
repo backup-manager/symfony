@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.0
+
+### Added
+
+- Support for providing a DSN string.
+- Support for configure MySQL database with "singleTransaction" and "ssl"
+
+### Fixed
+
+- Issue with Symfony 3.2 where commands were private. 
+- Issue with Symfony 3.2 because `scalarPrototype` was not defined. 
+
 ## 2.0.0
 
 The 2.0.0 release is just a technical BC break. We removed all adapters from the
