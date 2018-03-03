@@ -5,6 +5,7 @@ namespace BM\BackupManagerBundle\Tests\Functional;
 use BackupManager\Manager;
 use BM\BackupManagerBundle\BMBackupManagerBundle;
 use Nyholm\BundleTest\BaseBundleTestCase;
+use Nyholm\BundleTest\CompilerPass\PublicServicePass;
 
 class BundleInitializationTest extends BaseBundleTestCase
 {
@@ -13,6 +14,13 @@ class BundleInitializationTest extends BaseBundleTestCase
         return BMBackupManagerBundle::class;
     }
 
+    protected function setUp()
+    {
+        $this->addCompilerPass(new PublicServicePass('|backup_manager.*|'));
+        $this->addCompilerPass(new PublicServicePass('|backup_manager|'));
+    }
+
+
     public function testInitBundle()
     {
         // Create a new Kernel
@@ -20,7 +28,6 @@ class BundleInitializationTest extends BaseBundleTestCase
 
         // Add some configuration
         $kernel->addConfigFile(__DIR__.'/config/minimal.yml');
-        $kernel->addConfigFile(__DIR__.'/config/public_services.yml');
 
         // Boot the kernel.
         $this->bootKernel();
@@ -29,8 +36,22 @@ class BundleInitializationTest extends BaseBundleTestCase
         $container = $this->getContainer();
 
         // Test if you services exists
-        $this->assertTrue($container->has('test.backup_manager'));
-        $service = $container->get('test.backup_manager');
+        $this->assertTrue($container->has('backup_manager'));
+        $service = $container->get('backup_manager');
+        $this->assertInstanceOf(Manager::class, $service);
+    }
+
+    public function testNoConfig()
+    {
+        // Boot the kernel.
+        $this->bootKernel();
+
+        // Get the container
+        $container = $this->getContainer();
+
+        // Test if you services exists
+        $this->assertTrue($container->has('backup_manager'));
+        $service = $container->get('backup_manager');
         $this->assertInstanceOf(Manager::class, $service);
     }
 
@@ -43,7 +64,6 @@ class BundleInitializationTest extends BaseBundleTestCase
 
         // Add some configuration
         $kernel->addConfigFile(__DIR__.'/config/rackspace.yml');
-        $kernel->addConfigFile(__DIR__.'/config/public_services.yml');
 
         // Boot the kernel.
         $this->bootKernel();

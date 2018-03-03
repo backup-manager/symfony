@@ -58,7 +58,7 @@ class Configuration implements ConfigurationInterface
 
                 ->end() // End storage
 
-                ->arrayNode('database')->isRequired()
+                ->arrayNode('database')
                     ->validate()
                         ->ifTrue(function ($databases) {
                             $valid = true;
