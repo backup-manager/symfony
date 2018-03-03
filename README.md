@@ -71,6 +71,9 @@ bm_backup_manager:
             pass: password
             database: test
             ignoreTables: ['foo', 'bar']
+            
+            # If DSN is specified, it will override other values
+            dsn: 'mysql://root:root_pass@127.0.0.1:3306/test_db'
         production:
             type: postgresql
             host: localhost
@@ -78,6 +81,9 @@ bm_backup_manager:
             user: postgres
             pass: password
             database: test
+            
+            # If DSN is specified, it will override other values
+            dsn: 'pgsql://root:root_pass@127.0.0.1:5432/test_db'
     storage:
         local:
             type: Local
