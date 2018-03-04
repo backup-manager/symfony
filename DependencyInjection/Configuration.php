@@ -62,7 +62,14 @@ class Configuration implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(function ($databases) {
                             $valid = true;
-                            foreach ($databases as $d) {
+                            foreach ($databases as $name => $d) {
+                                if (isset($d['dsn'])) {
+                                    // "Fake" "type" for now.
+                                    $d['type'] = substr($d['dsn'], 0, strpos($d['dsn'], ':'));
+                                }
+                                if (!isset($d['type'])) {
+                                    throw new InvalidConfigurationException(sprintf('You must define a "type" or "dsn" for database "%s"', $name));
+                                }
                                 if ($d['type'] !== 'mysql') {
                                     // If not "mysql" we have to make sure these parameter are set to default
                                     $valid = $valid && empty($d['ignoreTables']) && empty($d['ssl']) && empty($d['singleTransaction']);

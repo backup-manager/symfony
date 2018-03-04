@@ -134,4 +134,33 @@ class ConfigurationTest extends TestCase
             )
         );
     }
+
+    public function testDsn()
+    {
+        $this->assertConfigurationIsInvalid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+                            'dsn' => 'pgsql://root:root_pass@127.0.0.1:5432/test_db',
+                            'singleTransaction' => true,
+                        ],
+                    ],
+                ]
+            )
+        );
+    }
+    public function testNoType()
+    {
+        $this->assertConfigurationIsInvalid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+
+                        ],
+                    ],
+                ]
+            ),
+            'You must define a "type" or "dsn" for database "dev"'
+        );
+    }
 }

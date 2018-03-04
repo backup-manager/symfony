@@ -33,7 +33,6 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('backup_manager.config_database', 0, $dbConfig);
     }
 
-
     public function testDsn()
     {
         $storageConfig = ['local'=>['type'=>'Local', 'root'=>'/foo']];
