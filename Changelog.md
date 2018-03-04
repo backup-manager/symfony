@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.1
+
+### Fixed
+
+- Allow to only use "dsn" without configure "type". 
+- Add better error message when both "dsn" and "type" is missing. 
+
 ## 2.1.0
 
 ### Added
