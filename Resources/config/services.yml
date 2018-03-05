@@ -54,6 +54,7 @@ services:
     # Database
     backup_manager.config_database:
         class:  BackupManager\Config\Config
+        factory: 'BM\BackupManagerBundle\Factory\ConfigFactory::createConfig'
         arguments: [[]]
         public: false
 
