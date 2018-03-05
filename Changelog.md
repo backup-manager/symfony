@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.2
+
+### Fixed
+
+- Support for environment variables in the config. 
+
 ## 2.1.1
 
 ### Fixed
