@@ -82,8 +82,8 @@ bm_backup_manager:
             pass: password
             database: test
             
-            # If DSN is specified, it will override other values
-            dsn: 'pgsql://root:root_pass@127.0.0.1:5432/test_db'
+            # You could also use a environment variable
+            dsn: '%env(resolve:DATABASE_URL)%'
     storage:
         local:
             type: Local
