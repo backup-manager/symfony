@@ -54,8 +54,10 @@ services:
     # Database
     backup_manager.config_database:
         class:  BackupManager\Config\Config
+        factory: '\BM\BackupManagerBundle\Factory::createConfig'
         arguments: [[]]
         public: false
+
 
     backup_manager.databases.mysql_database:
         class:  BackupManager\Databases\MysqlDatabase

@@ -64,10 +64,10 @@ class Configuration implements ConfigurationInterface
                             $valid = true;
                             foreach ($databases as $name => $d) {
                                 if (isset($d['dsn'])) {
-                                    // "Fake" "type" for now.
-                                    $d['type'] = substr($d['dsn'], 0, strpos($d['dsn'], ':'));
+                                    // We cannot resolve the DSN now. It might be a environment variable.
+                                    continue;
                                 }
-                                if (!isset($d['type'])) {
+                                if (empty($d['type'])) {
                                     throw new InvalidConfigurationException(sprintf('You must define a "type" or "dsn" for database "%s"', $name));
                                 }
                                 if ($d['type'] !== 'mysql') {
