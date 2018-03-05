@@ -58,7 +58,6 @@ services:
         arguments: [[]]
         public: false
 
-
     backup_manager.databases.mysql_database:
         class:  BackupManager\Databases\MysqlDatabase
         public: false
