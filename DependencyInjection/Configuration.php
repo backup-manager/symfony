@@ -25,10 +25,6 @@ class Configuration implements ConfigurationInterface
                                 if (!isset($config['type'])) {
                                     throw new InvalidConfigurationException(sprintf('You must define a "type" for storage "%s"', $name));
                                 }
-                                $validTypes = ['Local', 'AwsS3', 'Rackspace', 'Dropbox', 'Ftp', 'Sftp'];
-                                if (!in_array($config['type'], $validTypes)) {
-                                    throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
-                                }
 
                                 switch ($config['type']) {
                                     case 'Local':
@@ -43,12 +39,18 @@ class Configuration implements ConfigurationInterface
                                     case 'Dropbox':
                                         $this->validateAuthenticationType(['token', 'key', 'secret', 'app', 'root'], $config, 'Dropbox');
                                         break;
+                                    case 'DropboxV2':
+                                        $this->validateAuthenticationType(['token', 'root'], $config, 'DropboxV2');
+                                        break;
                                     case 'Ftp':
                                         $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'passive', 'ssl', 'timeout'], $config, 'Ftp');
                                         break;
                                     case 'Sftp':
                                         $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'], $config, 'Sftp');
                                         break;
+                                    default:
+                                        $validTypes = ['Local', 'AwsS3', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp'];
+                                        throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
                                 }
                             }
 

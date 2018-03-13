@@ -149,6 +149,7 @@ class ConfigurationTest extends TestCase
             )
         );
     }
+
     public function testNoType()
     {
         $this->assertConfigurationIsInvalid(array(
@@ -162,5 +163,35 @@ class ConfigurationTest extends TestCase
             ),
             'You must define a "type" or "dsn" for database "dev"'
         );
+    }
+
+    /**
+     *
+     * @dataProvider validStorageTypes
+     */
+    public function testStorageTypes($type)
+    {
+        $this->assertConfigurationIsValid(array(
+                [
+                    'database'=>[
+                        'dev'=>[
+                            'type' => 'mysql'
+                        ],
+                    ],
+                    'storage' => [
+                        'foo' => [
+                            'type' => $type,
+                        ]
+                    ]
+                ]
+            )
+        );
+    }
+
+    public function validStorageTypes()
+    {
+        return [
+            ['Local'],['AwsS3'], ['Rackspace'], ['Dropbox'], ['DropboxV2'], ['Ftp'], ['Sftp'],
+        ];
     }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.3
+
+### Fixed
+
+- Fixed bug that made DropboxV2 config unavailable.
+
 ## 2.1.2
 
 ### Fixed
