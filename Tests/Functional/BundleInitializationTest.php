@@ -57,7 +57,12 @@ class BundleInitializationTest extends BaseBundleTestCase
 
     public function testNoDependencies()
     {
-        $this->expectException(\LogicException::class);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException(\LogicException::class);
+        } else {
+            // Legacy
+            $this->setExpectedException(\LogicException::class);
+        }
 
         // Create a new Kernel
         $kernel = $this->createKernel();

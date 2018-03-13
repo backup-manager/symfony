@@ -6,7 +6,6 @@ use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Dropbox\DropboxAdapter;
-use Nyholm\DSN;
 use Srmklive\Dropbox\Adapter\DropboxAdapter as Dropbox2Adapter;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Sftp\SftpAdapter;

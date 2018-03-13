@@ -66,4 +66,4 @@ install:
 
 script:
     - composer validate --strict --no-check-lock
-#    - $TEST_COMMAND
+    - $TEST_COMMAND
