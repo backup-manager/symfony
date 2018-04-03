@@ -27,31 +27,30 @@ This command requires you to have Composer installed globally, as explained
 in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
 of the Composer documentation.
 
-Step 2: Enable the Bundle (Symfony 2 & 3)
------------------------------------------
+Step 2 (with Flex): Enable the Bundle
+-------------------------------------
 
-Then, enable the bundle by adding it to the list of registered bundles
-in the `app/AppKernel.php` file of your project:
+You do not need to do anything more. The bundle is enabled automatically and 
+you have some nice default config in `config/packages/bm_backup_manager.yml`.
+
+Step 2 (no Flex): Enable the Bundle
+-----------------------------------
+
+If you are not using Symfony Flex, you need to enable the bundle by adding it to 
+the list of registered bundles in the `app/AppKernel.php` file of your project.
 
 ```php
-<?php
 // app/AppKernel.php
 
-// ...
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
         $bundles = array(
             // ...
-
             new BM\BackupManagerBundle\BMBackupManagerBundle(),
         );
-
-        // ...
     }
-
-    // ...
 }
 ```
 
@@ -59,7 +58,7 @@ Step 3: Configure your databases and filesystems
 ------------------------------------------------
 
 ```yaml
-# app/config.yml
+# config/packages/bm_backup_manager.yml
 
 bm_backup_manager:
     database:
