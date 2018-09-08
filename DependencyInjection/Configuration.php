@@ -33,6 +33,9 @@ class Configuration implements ConfigurationInterface
                                     case 'AwsS3':
                                         $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root'], $config, 'AwsS3');
                                         break;
+                                    case 'B2':
+                                        $this->validateAuthenticationType(['key', 'accountId', 'bucket'], $config, 'B2');
+                                        break;
                                     case 'Rackspace':
                                         $this->validateAuthenticationType(['username', 'password', 'container'], $config, 'Rackspace');
                                         break;
@@ -49,7 +52,7 @@ class Configuration implements ConfigurationInterface
                                         $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'], $config, 'Sftp');
                                         break;
                                     default:
-                                        $validTypes = ['Local', 'AwsS3', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp'];
+                                        $validTypes = ['Local', 'AwsS3', 'B2', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp'];
                                         throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
                                 }
                             }

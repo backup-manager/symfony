@@ -95,6 +95,11 @@ bm_backup_manager:
             version: latest
             bucket:
             root:
+        b2:
+            type: B2
+            key:
+            accountId:
+            bucket:
         rackspace:
             type: Rackspace
             username:

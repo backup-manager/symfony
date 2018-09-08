@@ -22,6 +22,10 @@ services:
         class:  BackupManager\Filesystems\Awss3Filesystem
         public: false
 
+    backup_manager.filesystems.b2_filesystem:
+        class:  BackupManager\Filesystems\BackblazeFilesystem
+        public: false
+
     backup_manager.filesystems.dropbox_filesystem:
         class:  BackupManager\Filesystems\DropboxFilesystem
         public: false

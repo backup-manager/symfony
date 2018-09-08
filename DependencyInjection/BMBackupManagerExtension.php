@@ -6,6 +6,7 @@ use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Dropbox\DropboxAdapter;
+use Mhetreramesh\Flysystem\BackblazeAdapter;
 use Srmklive\Dropbox\Adapter\DropboxAdapter as Dropbox2Adapter;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Sftp\SftpAdapter;
@@ -34,6 +35,7 @@ class BMBackupManagerExtension extends Extension
         $managerIdMap = [
             'Local' => 'backup_manager.filesystems.local_filesystem',
             'AwsS3' => 'backup_manager.filesystems.awss3_filesystem',
+            'B2' => 'backup_manager.filesystems.b2_filesystem',
             'Rackspace' => 'backup_manager.filesystems.rackspace_filesystem',
             'Dropbox' => 'backup_manager.filesystems.dropbox_filesystem',
             'DropboxV2' => 'backup_manager.filesystems.dropbox_v2_filesystem',
@@ -67,6 +69,7 @@ class BMBackupManagerExtension extends Extension
         $requirements = [
             'Local' => ['package'=>'league/flysystem:^1.0', 'test'=>Local::class],
             'AwsS3' => ['package'=>'league/flysystem-aws-s3-v3:^1.0', 'test'=>AwsS3Adapter::class],
+            'B2' => ['package'=>'mhetreramesh/flysystem-backblaze:^1.0', 'test'=>BackblazeAdapter::class],
             'Rackspace' => ['package'=>'league/flysystem-rackspace:^1.0', 'test'=>RackspaceAdapter::class],
             'Dropbox' => ['package'=>'league/flysystem-dropbox:^1.0', 'test'=>DropboxAdapter::class],
             'DropboxV2' => ['package'=>'srmklive/flysystem-dropbox-v2:^1.0', 'test'=>Dropbox2Adapter::class],
