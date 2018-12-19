@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^5.5 || ^7.0",
-        "backup-manager/backup-manager": "^1.2",
+        "backup-manager/backup-manager": "^1.3",
         "nyholm/dsn": "^0.1",
         "symfony/config": "^2.7 || ^3.1 || ^4.0",
         "symfony/console": "^2.7 || ^3.1 || ^4.0",
@@ -30,6 +30,7 @@
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "To use AWS S3, version 3",
+        "mhetreramesh/flysystem-backblaze": "To use B2",
         "srmklive/flysystem-dropbox-v2": "To use Dropbox",
         "league/flysystem-rackspace": "To use Rackspace",
         "league/flysystem-sftp": "To use sftp"
