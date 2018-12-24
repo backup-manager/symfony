@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fixed root node deprecation in symfony/config > 4.1
+- Adds support for the Backblaze B2 Cloud Storage
 
 ## 2.1.3
 
