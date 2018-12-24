@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.4
+
+### Fixed
+
+- Fixed root node deprecation in symfony/config > 4.1
+
 ## 2.1.3
 
 ### Fixed
