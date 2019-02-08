@@ -50,6 +50,10 @@ services:
         class:  BackupManager\Filesystems\SftpFilesystem
         public: false
 
+    backup_manager.filesystems.gcs_filesystem:
+        class:  BackupManager\Filesystems\GcsFilesystem
+        public: false
+
     backup_manager.filesystems:
         class:  BackupManager\Filesystems\FilesystemProvider
         public: false
