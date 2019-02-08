@@ -57,8 +57,11 @@ class Configuration implements ConfigurationInterface
                                     case 'Sftp':
                                         $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'], $config, 'Sftp');
                                         break;
+                                    case 'Flysystem':
+                                        $this->validateAuthenticationType(['name', 'prefix'], $config, 'Flysystem');
+                                        break;
                                     default:
-                                        $validTypes = ['Local', 'AwsS3', 'B2', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp'];
+                                        $validTypes = ['Local', 'AwsS3', 'B2', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp', 'Flysystem'];
                                         throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
                                 }
                             }

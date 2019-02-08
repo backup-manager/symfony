@@ -6,6 +6,7 @@ use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Dropbox\DropboxAdapter;
+use League\Flysystem\FilesystemInterface;
 use Mhetreramesh\Flysystem\BackblazeAdapter;
 use Srmklive\Dropbox\Adapter\DropboxAdapter as Dropbox2Adapter;
 use League\Flysystem\Rackspace\RackspaceAdapter;
@@ -41,6 +42,7 @@ class BMBackupManagerExtension extends Extension
             'DropboxV2' => 'backup_manager.filesystems.dropbox_v2_filesystem',
             'Ftp' => 'backup_manager.filesystems.ftp_filesystem',
             'Sftp' => 'backup_manager.filesystems.sftp_filesystem',
+            'Flysystem' => 'backup_manager.filesystems.flysystem_filesystem',
         ];
 
         $filesystemDef = $container->getDefinition('backup_manager.filesystems');
@@ -75,6 +77,7 @@ class BMBackupManagerExtension extends Extension
             'DropboxV2' => ['package'=>'srmklive/flysystem-dropbox-v2:^1.0', 'test'=>Dropbox2Adapter::class],
             'Ftp' => ['package'=>'league/flysystem:^1.0', 'test'=>Ftp::class],
             'Sftp' => ['package'=>'league/flysystem-sftp:^1.0', 'test'=>SftpAdapter::class],
+            'Flysystem' => ['package'=>'league/flysystem:^1.0', 'test'=> FilesystemInterface::class],
         ];
 
         foreach ($config as $key => $storageConfig) {

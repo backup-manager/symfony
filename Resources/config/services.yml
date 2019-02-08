@@ -50,6 +50,11 @@ services:
         class:  BackupManager\Filesystems\SftpFilesystem
         public: false
 
+    backup_manager.filesystems.flysystem_filesystem:
+        class:  BackupManager\Filesystems\FlysystemFilesystem
+        arguments: [] # in compiler pass
+        public: false
+
     backup_manager.filesystems:
         class:  BackupManager\Filesystems\FilesystemProvider
         public: false
