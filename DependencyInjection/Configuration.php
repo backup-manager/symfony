@@ -144,7 +144,7 @@ class Configuration implements ConfigurationInterface
         }
 
         throw new InvalidConfigurationException(sprintf(
-            'Storage type "%s" has valid keys "%s" but got "%s"',
+            'Storage type "%s" has valid keys "%s" but not "%s"',
             $typeName,
             implode(', ', $expected),
             implode(', ', $actual)
