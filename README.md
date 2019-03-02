@@ -136,7 +136,7 @@ bm_backup_manager:
 Usage
 =====
 
-Backup to / restore from any configured database.
+To backup from any configured database.
 -------------------------------------------------
 
 Backup the development database to `Amazon S3`. The S3 backup path will be `test/backup.sql.gz` in the end, when `gzip` is done with it.
@@ -149,7 +149,7 @@ $this->container->get('backup_manager')->makeBackup()->run('development', [new D
 php bin/console backup-manager:backup development s3 -c gzip --filename test/backup.sql
 ```
 
-Backup to / restore from any configured filesystem.
+To restore from any configured filesystem.
 ---------------------------------------------------
 
 Restore the database file `test/backup.sql.gz` from `Amazon S3` to the `development` database.
