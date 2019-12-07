@@ -14,7 +14,7 @@ class BundleInitializationTest extends BaseBundleTestCase
         return BMBackupManagerBundle::class;
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addCompilerPass(new PublicServicePass('|backup_manager.*|'));
         $this->addCompilerPass(new PublicServicePass('|backup_manager|'));

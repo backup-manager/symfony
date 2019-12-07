@@ -69,5 +69,7 @@ class BackupCommand extends Command
         }
 
         $this->manager->makeBackup()->run($input->getArgument('database'), $destinations, $input->getOption('compression'));
+
+        return 0;
     }
 }
