@@ -5,7 +5,7 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         syntaxCheck="true">
+         >
     <php>
         <env name="SHELL_VERBOSITY" value="-1" />
     </php>

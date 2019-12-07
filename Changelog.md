@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.3.0
+
+### Added
+
+- Support for Google cloud storage
+- Support for Symfony 5
+
+### Changed
+
+- Removed support for PHP < 7.2
+- Removed support Symfony < 3.4
+
 ## 2.2.0
 
 ### Fixed
