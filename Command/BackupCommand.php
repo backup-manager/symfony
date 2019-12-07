@@ -51,7 +51,7 @@ class BackupCommand extends Command
             ->setName(self::$defaultName)
             ->setDescription('Starts a new backup.')
             ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to backup?')
-            ->addArgument('destinations', InputArgument::IS_ARRAY, 'What storages do you want to upload the backup to?')
+            ->addArgument('destinations', InputArgument::IS_ARRAY, 'What storages do you want to upload the backup to? Must be array.')
             ->addOption('compression', 'c', InputOption::VALUE_OPTIONAL, 'How do you want to compress the file?', 'null')
             ->addOption('filename', 'name', InputOption::VALUE_OPTIONAL, 'A customized filename', null)
         ;
