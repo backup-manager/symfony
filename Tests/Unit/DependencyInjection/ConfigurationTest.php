@@ -176,7 +176,7 @@ class ConfigurationTest extends TestCase
     public function validStorageTypes()
     {
         return [
-            ['Local'],['AwsS3'], ['B2'], ['Rackspace'], ['Dropbox'], ['DropboxV2'], ['Ftp'], ['Sftp'],
+            ['Local'],['AwsS3'], ['B2'], ['Rackspace'], ['Dropbox'], ['DropboxV2'], ['Ftp'], ['Sftp'], ['Gcs'],
         ];
     }
 }

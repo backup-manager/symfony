@@ -10,6 +10,7 @@ use Mhetreramesh\Flysystem\BackblazeAdapter;
 use Srmklive\Dropbox\Adapter\DropboxAdapter as Dropbox2Adapter;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use League\Flysystem\Sftp\SftpAdapter;
+use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -41,6 +42,7 @@ class BMBackupManagerExtension extends Extension
             'DropboxV2' => 'backup_manager.filesystems.dropbox_v2_filesystem',
             'Ftp' => 'backup_manager.filesystems.ftp_filesystem',
             'Sftp' => 'backup_manager.filesystems.sftp_filesystem',
+            'Gcs' => 'backup_manager.filesystems.gcs_filesystem',
         ];
 
         $filesystemDef = $container->getDefinition('backup_manager.filesystems');
@@ -75,6 +77,7 @@ class BMBackupManagerExtension extends Extension
             'DropboxV2' => ['package'=>'srmklive/flysystem-dropbox-v2:^1.0', 'test'=>Dropbox2Adapter::class],
             'Ftp' => ['package'=>'league/flysystem:^1.0', 'test'=>Ftp::class],
             'Sftp' => ['package'=>'league/flysystem-sftp:^1.0', 'test'=>SftpAdapter::class],
+            'Gcs' => ['package' => 'superbalist/flysystem-google-storage:^6.0', 'test' => GoogleStorageAdapter::class],
         ];
 
         foreach ($config as $key => $storageConfig) {
