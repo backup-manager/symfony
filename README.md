@@ -167,7 +167,7 @@ php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip
 Requirements
 ============
 
-- PHP 7.2
+- PHP 7.3
 - MySQL support requires `mysqldump` and `mysql` command-line binaries
 - PostgreSQL support requires `pg_dump` and `psql` command-line binaries
 - Gzip support requires `gzip` and `gunzip` command-line binaries
