@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.4.0
+
+### Fixed
+
+- Support for Symfony 5
+
+### Changed
+
+- Removed support for PHP < 7.3
+
 ## 2.3.0
 
 ### Added
