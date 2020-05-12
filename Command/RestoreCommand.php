@@ -58,6 +58,8 @@ class RestoreCommand extends Command
             $input->getArgument('database'),
             $input->getOption('compression')
         );
+        
+        return 0;
     }
 
 }
