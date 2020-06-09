@@ -83,7 +83,7 @@ class BMBackupManagerExtension extends Extension
         foreach ($config as $key => $storageConfig) {
             $type = $storageConfig['type'];
             if (!class_exists($requirements[$type]['test'])) {
-                throw new \LogicException(sprintf('To use the configuration key "%s" in "bm_backup_manager.stroage.%s.type" you need to install "%s"', $type, $key, $requirements[$type]['package']));
+                throw new \LogicException(sprintf('To use the configuration key "%s" in "bm_backup_manager.storage.%s.type" you need to install "%s"', $type, $key, $requirements[$type]['package']));
             }
         }
     }
