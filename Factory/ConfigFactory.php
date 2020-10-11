@@ -3,7 +3,7 @@
 namespace BM\BackupManagerBundle\Factory;
 
 use BackupManager\Config\Config;
-use Nyholm\DSN;
+use Nyholm\Dsn\DsnParser;
 
 /**
  * A factory class to resolve DSN
@@ -21,13 +21,13 @@ class ConfigFactory
     {
         foreach ($config as $key => $databaseConfig) {
             if (isset($databaseConfig['dsn'])) {
-                $dsn = new DSN($databaseConfig['dsn']);
-                $config[$key]['type'] = $dsn->getProtocol();
-                $config[$key]['host'] = $dsn->getFirstHost();
-                $config[$key]['port'] = $dsn->getFirstPort();
-                $config[$key]['user'] = $dsn->getUsername();
+                $dsn = DsnParser::parseUrl($databaseConfig['dsn']);
+                $config[$key]['type'] = $dsn->getScheme();
+                $config[$key]['host'] = $dsn->getHost();
+                $config[$key]['port'] = $dsn->getPort();
+                $config[$key]['user'] = $dsn->getUser();
                 $config[$key]['pass'] = $dsn->getPassword();
-                $config[$key]['database'] = $dsn->getDatabase();
+                $config[$key]['database'] = $dsn->getPath();
                 unset($config[$key]['dsn']);
             }
         }
