@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                                         $this->validateAuthenticationType(['root'], $config, 'Local');
                                         break;
                                     case 'AwsS3':
-                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root'], $config, 'AwsS3');
+                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root', 'endpoint'], $config, 'AwsS3');
                                         break;
                                     case 'B2':
                                         $this->validateAuthenticationType(['key', 'accountId', 'bucket'], $config, 'B2');
