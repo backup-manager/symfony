@@ -6,9 +6,9 @@ BackupManagerBundle
 [![Build Status](https://travis-ci.org/backup-manager/symfony.svg?branch=master)](https://travis-ci.org/backup-manager/symfony)
 [![Total Downloads](https://poser.pugx.org/backup-manager/symfony/downloads.png)](https://packagist.org/packages/backup-manager/symfony)
 
-A simple database backup manager for Symfony2 with support for S3, Rackspace, Dropbox, FTP, SFTP.
+A simple database backup manager for Symfony with support for S3, Rackspace, Dropbox, FTP, SFTP.
 
-This package pulls in the framework agnostic [Backup Manager](https://github.com/backup-manager/backup-manager) and provides seamless integration with **Symfony**. 
+This package pulls in the framework agnostic [Backup Manager](https://github.com/backup-manager/backup-manager) and provides seamless integration with **Symfony**.
 
 Installation
 ============
@@ -30,13 +30,13 @@ of the Composer documentation.
 Step 2 (with Flex): Enable the Bundle
 -------------------------------------
 
-You do not need to do anything more. The bundle is enabled automatically and 
+You do not need to do anything more. The bundle is enabled automatically and
 you have some nice default config in `config/packages/bm_backup_manager.yml`.
 
 Step 2 (no Flex): Enable the Bundle
 -----------------------------------
 
-If you are not using Symfony Flex, you need to enable the bundle by adding it to 
+If you are not using Symfony Flex, you need to enable the bundle by adding it to
 the list of registered bundles in the `app/AppKernel.php` file of your project.
 
 ```php
@@ -70,7 +70,7 @@ bm_backup_manager:
             pass: password
             database: test
             ignoreTables: ['foo', 'bar']
-            
+
             # If DSN is specified, it will override other values
             dsn: 'mysql://root:root_pass@127.0.0.1:3306/test_db'
         production:
@@ -80,7 +80,7 @@ bm_backup_manager:
             user: postgres
             pass: password
             database: test
-            
+
             # You could also use a environment variable
             dsn: '%env(resolve:DATABASE_URL)%'
     storage:
@@ -159,7 +159,7 @@ $this->container->get('backup_manager')->makeRestore()->run('s3', 'test/backup.s
 ```
 
 ```bash
-php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip 
+php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip
 ```
 
 > This package does not allow you to backup from one database type and restore to another. A MySQL dump is not compatible with PostgreSQL.
