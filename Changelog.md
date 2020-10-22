@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.1.0
+
+### Added
+
+- "endpoint" option to AwsS3
+
+### Fixed
+
+- RestoreCommand must return int
+
+### Changed
+
+- Updated to version 2 of nyholm/dsn
+
 ## 3.0.0
 
 ### Fixed
@@ -39,14 +53,14 @@
 
 ### Fixed
 
-- Support for environment variables in the config. 
+- Support for environment variables in the config.
 
 ## 2.1.1
 
 ### Fixed
 
-- Allow to only use "dsn" without configure "type". 
-- Add better error message when both "dsn" and "type" is missing. 
+- Allow to only use "dsn" without configure "type".
+- Add better error message when both "dsn" and "type" is missing.
 
 ## 2.1.0
 
@@ -57,32 +71,32 @@
 
 ### Fixed
 
-- Issue with Symfony 3.2 where commands were private. 
-- Issue with Symfony 3.2 because `scalarPrototype` was not defined. 
+- Issue with Symfony 3.2 where commands were private.
+- Issue with Symfony 3.2 because `scalarPrototype` was not defined.
 
 ## 2.0.0
 
 The 2.0.0 release is just a technical BC break. We removed all adapters from the
-composer.json. So you need to re-add the adapters you were using.   
+composer.json. So you need to re-add the adapters you were using.
 
 ### Added
 
-- Added support for Symfony 4. 
+- Added support for Symfony 4.
 - Added tests
 - Support for many storage names with the same type.
 - Added commands for backup and restore
 - Support for `ignoreTables` on MySQL databases.
-- Added config `output_file_prefix`. 
+- Added config `output_file_prefix`.
 - Support for DropboxV2
 
 ### Changes
 
 - You have to `composer require` for the adapter you want to use. Nothing is included by default.
-- The storage and database type is case-sensitive. 
+- The storage and database type is case-sensitive.
 
 ### Removed
 
-- Support for Symfony < 2.7. 
+- Support for Symfony < 2.7.
 
 ## 1.1.0
 
