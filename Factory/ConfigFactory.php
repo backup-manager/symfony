@@ -27,7 +27,11 @@ class ConfigFactory
                 $config[$key]['port'] = $dsn->getPort();
                 $config[$key]['user'] = $dsn->getUser();
                 $config[$key]['pass'] = $dsn->getPassword();
-                $config[$key]['database'] = $dsn->getPath();
+                if (null !== $path = $dsn->getPath()) {
+                    $path = ltrim($path, '/');
+                }
+
+                $config[$key]['database'] = $path;
                 unset($config[$key]['dsn']);
             }
         }
