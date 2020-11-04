@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.1
+
+### Fixed
+
+- Removed extra forward slash on DSN path.
+
 ## 3.1.0
 
 ### Added
