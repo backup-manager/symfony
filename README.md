@@ -40,18 +40,13 @@ If you are not using Symfony Flex, you need to enable the bundle by adding it to
 the list of registered bundles in the `app/AppKernel.php` file of your project.
 
 ```php
-// app/AppKernel.php
+// config/bundles.php
 
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-            new BM\BackupManagerBundle\BMBackupManagerBundle(),
-        );
-    }
-}
+return [
+    BM\BackupManagerBundle\BMBackupManagerBundle::class => ['all' => true],
+    // ...
+];
+
 ```
 
 Step 3: Configure your databases and filesystems
@@ -142,8 +137,20 @@ To backup from any configured database.
 Backup the development database to `Amazon S3`. The S3 backup path will be `test/backup.sql.gz` in the end, when `gzip` is done with it.
 
 ```php
-$this->container->get('backup_manager')->makeBackup()->run('development', [new Destination('s3', 'test/backup.sql')], 'gzip');
+class Foo {
+  private $backupManager;
+
+  public function __construct(BackupManager $backupManager) {
+      $this->backupManager = $backupManager;
+  }
+
+  public function bar() {
+      $this->backupManager->makeBackup()->run('development', [new Destination('s3', 'test/backup.sql')], 'gzip');
+  }
+}
 ```
+
+Or with a command:
 
 ```bash
 php bin/console backup-manager:backup development s3 -c gzip --filename test/backup.sql
@@ -155,8 +162,20 @@ To restore from any configured filesystem.
 Restore the database file `test/backup.sql.gz` from `Amazon S3` to the `development` database.
 
 ```php
-$this->container->get('backup_manager')->makeRestore()->run('s3', 'test/backup.sql.gz', 'development', 'gzip');
+class Foo {
+  private $backupManager;
+
+  public function __construct(BackupManager $backupManager) {
+      $this->backupManager = $backupManager;
+  }
+
+  public function bar() {
+      $this->backupManager->makeRestore()->run('s3', 'test/backup.sql.gz', 'development', 'gzip');
+  }
+}
 ```
+
+Or with a command:
 
 ```bash
 php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip
