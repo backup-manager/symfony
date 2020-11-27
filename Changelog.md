@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0
+
+### Added
+
+- Support for auto wiring `BackupManager`
+
 ## 3.1.1
 
 ### Fixed
