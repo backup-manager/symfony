@@ -102,3 +102,6 @@ services:
     backup_manager:
         class:  BackupManager\Manager
         arguments: ["@backup_manager.filesystems", "@backup_manager.databases", "@backup_manager.compressors"]
+
+    # Add alias for autowriring
+    BackupManager\Manager: '@backup_manager'
