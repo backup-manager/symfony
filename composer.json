@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.3 || ^8.0",
         "backup-manager/backup-manager": "^3.0",
         "nyholm/dsn": "^2.0",
         "symfony/config": "^3.4 || ^4.4 || ^5.0",
