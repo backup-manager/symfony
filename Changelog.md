@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Added
+
+- Add option 'extraParams' for database's config
+
 ## 3.2.0
 
 ### Added

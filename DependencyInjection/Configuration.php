@@ -115,6 +115,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('dsn')->end()
                             ->booleanNode('singleTransaction')->end()
                             ->booleanNode('ssl')->end()
+                            ->scalarNode('extraParams')->end()
                             ->arrayNode('ignoreTables')
                                  ->prototype('scalar')->end()
                             ->end()
