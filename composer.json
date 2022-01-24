@@ -18,13 +18,13 @@
         "php": "^7.3 || ^8.0",
         "backup-manager/backup-manager": "^3.0",
         "nyholm/dsn": "^2.0",
-        "symfony/config": "^3.4 || ^4.4 || ^5.0",
-        "symfony/console": "^3.4 || ^4.4 || ^5.0",
-        "symfony/dependency-injection": "^3.4 || ^4.4 || ^5.0",
-        "symfony/filesystem": "^3.4 || ^4.4 || ^5.0",
-        "symfony/framework-bundle": "^3.4 || ^4.4 || ^5.0",
-        "symfony/http-kernel": "^3.4 || ^4.4 || ^5.0",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5.0"
+        "symfony/config": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/console": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/dependency-injection": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/filesystem": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/framework-bundle": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/http-kernel": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/yaml": "^3.4 || ^4.4 || ^5.0 || ^6.0"
     },
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^4.1",
