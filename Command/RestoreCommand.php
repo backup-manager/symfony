@@ -50,7 +50,7 @@ class RestoreCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->manager->makeRestore()->run(
             $input->getArgument('destination'),
@@ -58,8 +58,8 @@ class RestoreCommand extends Command
             $input->getArgument('database'),
             $input->getOption('compression')
         );
-        
-        return 0;
+
+        return Command::SUCCESS;
     }
 
 }

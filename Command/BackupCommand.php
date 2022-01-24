@@ -57,7 +57,7 @@ class BackupCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (null === $filename = $input->getOption('filename')) {
             $filename = $this->filePrefix.(new \DateTime())->format('Y-m-d_H-i-s');
@@ -70,6 +70,6 @@ class BackupCommand extends Command
 
         $this->manager->makeBackup()->run($input->getArgument('database'), $destinations, $input->getOption('compression'));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
