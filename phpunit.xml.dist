@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         failOnDeprecation="true"
+         failOnPhpunitDeprecation="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true">
     <php>
         <env name="SHELL_VERBOSITY" value="-1"/>
     </php>
@@ -8,4 +12,13 @@
             <directory suffix="Test.php">Tests</directory>
         </testsuite>
     </testsuites>
+    <!-- Symfony reports deprecations with @trigger_error(); count them anyway. -->
+    <source ignoreSuppressionOfDeprecations="true">
+        <include>
+            <file>BMBackupManagerBundle.php</file>
+            <directory>Command</directory>
+            <directory>DependencyInjection</directory>
+            <directory>Factory</directory>
+        </include>
+    </source>
 </phpunit>
