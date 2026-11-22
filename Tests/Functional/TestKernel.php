@@ -34,7 +34,14 @@ class TestKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(function (ContainerBuilder $container) {
-            $container->loadFromExtension('framework', ['secret' => 'test', 'test' => true]);
+            $container->loadFromExtension('framework', [
+                'secret' => 'test',
+                'test' => true,
+                // Explicit on Symfony 6.4, which deprecates relying on their defaults.
+                'http_method_override' => false,
+                'handle_all_throwables' => true,
+                'php_errors' => ['log' => true],
+            ]);
         });
         foreach ($this->configFiles as $file) {
             $loader->load($file);
