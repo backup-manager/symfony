@@ -2,6 +2,16 @@
 
 ## UNRELEASED
 
+## 3.3.1
+
+### Security
+
+- Requires `backup-manager/backup-manager` ^3.3.1, which restores MySQL dumps through stdin; a crafted backup file name could run shell or mysql client commands during a restore.
+
+### Documentation
+
+- 4.x is the active line; 3.x receives security fixes until 2027-12-31.
+
 ## 3.3.0
 
 ### Added
