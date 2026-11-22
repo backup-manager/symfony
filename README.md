@@ -73,7 +73,7 @@ bm_backup_manager:
             # ssl: true                         # --ssl
             # columnStatistics: false           # --column-statistics=0 (MySQL 8 mysqldump, older servers)
             # socket: /run/mysqld/mysqld.sock   # instead of host and port
-            # extraParams: '--max-allowed-packet=64M'
+            # extraParams: '--max-allowed-packet=64M'   # MySQL only; ignored for PostgreSQL
 
             # If DSN is specified, it will override other values. User and
             # password must be url-encoded (e.g. "p@ss" as "p%40ss").

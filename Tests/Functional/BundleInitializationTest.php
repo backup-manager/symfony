@@ -63,14 +63,48 @@ class BundleInitializationTest extends TestCase
         $container->get('backup_manager.filesystems')->get('webdav');
     }
 
-    public function testTheCommandsAreRegistered(): void
+    public function testTheBackupCommandRunsABackup(): void
     {
-        $application = new Application($this->boot([__DIR__ . '/config/minimal.yml']));
+        $application = $this->applicationWithManager($manager = $this->createStub(Manager::class));
+        $backup = $this->createMock(\BackupManager\Procedures\BackupProcedure::class);
+        $manager->method('makeBackup')->willReturn($backup);
+        $backup->expects($this->once())->method('run')->with(
+            'development',
+            $this->callback(function (array $destinations): bool {
+                return count($destinations) === 1
+                    && $destinations[0]->destinationFilesystem() === 'local'
+                    && $destinations[0]->destinationPath() === 'nightly.sql';
+            }),
+            'gzip'
+        );
 
-        $this->assertTrue($application->has('backup-manager:backup'));
-        $this->assertTrue($application->has('backup-manager:restore'));
         $tester = new CommandTester($application->find('backup-manager:backup'));
-        $this->assertStringContainsString('database', $application->find('backup-manager:backup')->getDefinition()->getArgument('database')->getName());
-        $this->assertNotNull($tester);
+        $exitCode = $tester->execute(['database' => 'development', 'destinations' => ['local'], '--compression' => 'gzip', '--filename' => 'nightly.sql']);
+
+        $this->assertSame(0, $exitCode);
+    }
+
+    public function testTheRestoreCommandRunsARestore(): void
+    {
+        $application = $this->applicationWithManager($manager = $this->createStub(Manager::class));
+        $restore = $this->createMock(\BackupManager\Procedures\RestoreProcedure::class);
+        $manager->method('makeRestore')->willReturn($restore);
+        $restore->expects($this->once())->method('run')->with('local', 'nightly.sql.gz', 'development', 'gzip');
+
+        $tester = new CommandTester($application->find('backup-manager:restore'));
+        $exitCode = $tester->execute(['database' => 'development', 'destination' => 'local', 'file_path' => 'nightly.sql.gz', '--compression' => 'gzip']);
+
+        $this->assertSame(0, $exitCode);
+    }
+
+    /**
+     * @param Manager $manager a test double replacing the bundle's manager
+     */
+    private function applicationWithManager($manager): Application
+    {
+        $kernel = $this->boot([__DIR__ . '/config/minimal.yml']);
+        $kernel->getContainer()->set('backup_manager', $manager);
+
+        return new Application($kernel);
     }
 }

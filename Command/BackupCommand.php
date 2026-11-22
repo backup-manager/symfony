@@ -72,6 +72,6 @@ class BackupCommand extends Command
 
         $this->manager->makeBackup()->run($input->getArgument('database'), $destinations, $input->getOption('compression'));
 
-        return Command::SUCCESS;
+        return 0;
     }
 }

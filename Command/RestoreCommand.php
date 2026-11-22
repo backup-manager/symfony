@@ -61,7 +61,7 @@ class RestoreCommand extends Command
             $input->getOption('compression')
         );
 
-        return Command::SUCCESS;
+        return 0;
     }
 
 }
