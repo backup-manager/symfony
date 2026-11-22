@@ -61,4 +61,23 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('backup_manager.filesystems', 'add', [new \Symfony\Component\DependencyInjection\Reference('backup_manager.filesystems.async_awss3_filesystem')]);
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('backup_manager.filesystems', 'add', [new \Symfony\Component\DependencyInjection\Reference('backup_manager.filesystems.webdav_filesystem')]);
     }
+
+    public function testStoragesOfOneTypeAddItsFilesystemOnce(): void
+    {
+        $this->load(['storage' => [
+            'daily' => ['type' => 'Local', 'root' => '/daily'],
+            'weekly' => ['type' => 'Local', 'root' => '/weekly'],
+        ]]);
+
+        $calls = $this->container->getDefinition('backup_manager.filesystems')->getMethodCalls();
+        $this->assertCount(1, $calls);
+        $this->assertSame('backup_manager.filesystems.local_filesystem', (string) $calls[0][1][0]);
+    }
+
+    public function testOutputFilePrefixIsPassedToTheBackupCommand(): void
+    {
+        $this->load(['output_file_prefix' => 'nightly-']);
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('backup_manager.command.backup', 1, 'nightly-');
+    }
 }

@@ -33,7 +33,7 @@ final class BackupCommand extends Command
             ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to backup?')
             ->addArgument('destinations', InputArgument::IS_ARRAY, 'What storages do you want to upload the backup to? Must be array.')
             ->addOption('compression', 'c', InputOption::VALUE_OPTIONAL, 'How do you want to compress the file?', 'null')
-            ->addOption('filename', 'name', InputOption::VALUE_OPTIONAL, 'A customized filename', null);
+            ->addOption('filename', null, InputOption::VALUE_OPTIONAL, 'A customized filename', null);
     }
 
     #[\Override]
@@ -49,13 +49,18 @@ final class BackupCommand extends Command
             $destinations[] = new Destination($name, $filename);
         }
 
-        $compression = $input->getOption('compression');
-        $this->manager->makeBackup()->run(
-            $input->getArgument('database'),
-            $destinations,
-            is_string($compression) ? $compression : null
-        );
+        $this->manager->makeBackup()->run($input->getArgument('database'), $destinations, self::compression($input));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * "-c" without a value means no compression.
+     */
+    private static function compression(InputInterface $input): string
+    {
+        $compression = $input->getOption('compression');
+
+        return is_string($compression) && $compression !== '' ? $compression : 'null';
     }
 }

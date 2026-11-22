@@ -30,6 +30,11 @@ The services `backup_manager.filesystems.b2_filesystem`,
 
 - `Dropbox` storage accepts only `token` and `root` (the keys the core
   library reads); `key`, `secret` and `app` are rejected.
+- The other storage types accept every key the core library reads, which is
+  more than 3.x allowed: Gcs `projectId`; Sftp `passphrase`, `useAgent`,
+  `maxTries`, `hostFingerprint`; Ftp `utf8`, `transferMode`, `systemType`,
+  `ignorePassiveAddress`, `timestampsOnUnixListingsEnabled`,
+  `recurseManually`; Webdav `authType`, `proxy`, `encoding`.
 - The "only valid on MySQL databases" error names the offending database and
   key, and `type: pdo_mysql` counts as MySQL.
 
@@ -44,3 +49,12 @@ The services `backup_manager.filesystems.b2_filesystem`,
 - Native parameter and return types throughout, and `strict_types`.
 - `BackupCommand::__construct(Manager $manager, string $filePrefix = '')`:
   `$filePrefix` is a typed string.
+
+### Commands
+
+- `backup-manager:backup`: the `--filename` option no longer has the
+  shortcut `name`; Symfony parsed `-name` as `-n -a -m -e`, so it never
+  worked. Use `--filename`.
+- `-c` / `--compression` given without a value means `null` (no
+  compression); before, the backup failed with "compressor type not
+  supported".

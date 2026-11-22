@@ -11,18 +11,25 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 final class Configuration implements ConfigurationInterface
 {
     /**
-     * Keys each storage type accepts besides "type"; they are the keys the
-     * core filesystem factories read.
+     * Keys each storage type accepts besides "type": the keys the core
+     * filesystem factories read, including those they pass on to the adapter
+     * (FtpConnectionOptions, SftpConnectionProvider, Sabre\DAV\Client).
      */
     private const STORAGE_KEYS = [
         'Local' => ['root'],
         'AwsS3' => ['key', 'secret', 'region', 'version', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'],
         'AsyncAwsS3' => ['key', 'secret', 'region', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'],
         'Dropbox' => ['token', 'root'],
-        'Ftp' => ['host', 'username', 'password', 'root', 'port', 'passive', 'ssl', 'timeout'],
-        'Sftp' => ['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'],
-        'Gcs' => ['project', 'keyFilePath', 'bucket', 'prefix', 'root'],
-        'Webdav' => ['baseUri', 'userName', 'password', 'prefix'],
+        'Ftp' => [
+            'host', 'username', 'password', 'root', 'port', 'passive', 'ssl', 'timeout', 'utf8', 'transferMode',
+            'systemType', 'ignorePassiveAddress', 'timestampsOnUnixListingsEnabled', 'recurseManually',
+        ],
+        'Sftp' => [
+            'host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey', 'passphrase', 'useAgent',
+            'maxTries', 'hostFingerprint',
+        ],
+        'Gcs' => ['project', 'projectId', 'keyFilePath', 'bucket', 'prefix', 'root'],
+        'Webdav' => ['baseUri', 'userName', 'password', 'prefix', 'authType', 'proxy', 'encoding'],
     ];
 
     /**

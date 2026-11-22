@@ -36,14 +36,23 @@ final class RestoreCommand extends Command
     #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $compression = $input->getOption('compression');
         $this->manager->makeRestore()->run(
             $input->getArgument('destination'),
             $input->getArgument('file_path'),
             $input->getArgument('database'),
-            is_string($compression) ? $compression : null
+            self::compression($input)
         );
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * "-c" without a value means no compression.
+     */
+    private static function compression(InputInterface $input): string
+    {
+        $compression = $input->getOption('compression');
+
+        return is_string($compression) && $compression !== '' ? $compression : 'null';
     }
 }

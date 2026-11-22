@@ -191,6 +191,35 @@ class ConfigurationTest extends TestCase
         ];
     }
 
+    /**
+     * @dataProvider fullStorageConfigs
+     */
+    #[DataProvider('fullStorageConfigs')]
+    public function testEveryKeyTheCoreLibraryReadsIsAccepted(array $storage): void
+    {
+        $this->assertConfigurationIsValid([['storage' => ['s' => $storage]]]);
+    }
+
+    public static function fullStorageConfigs(): array
+    {
+        return [
+            'Local' => [['type' => 'Local', 'root' => '/backups']],
+            'AwsS3' => [['type' => 'AwsS3', 'key' => 'k', 'secret' => 's', 'region' => 'r', 'version' => 'latest', 'bucket' => 'b', 'root' => '', 'endpoint' => 'https://s3.example', 'use_path_style_endpoint' => true]],
+            'AsyncAwsS3' => [['type' => 'AsyncAwsS3', 'key' => 'k', 'secret' => 's', 'region' => 'r', 'bucket' => 'b', 'root' => '', 'endpoint' => 'https://s3.example', 'use_path_style_endpoint' => true]],
+            'Dropbox' => [['type' => 'Dropbox', 'token' => 't', 'root' => '']],
+            'Ftp' => [['type' => 'Ftp', 'host' => 'h', 'username' => 'u', 'password' => 'p', 'root' => '', 'port' => 21, 'passive' => true, 'ssl' => true, 'timeout' => 30, 'utf8' => true, 'transferMode' => 2, 'systemType' => 'unix', 'ignorePassiveAddress' => true, 'timestampsOnUnixListingsEnabled' => true, 'recurseManually' => true]],
+            'Sftp' => [['type' => 'Sftp', 'host' => 'h', 'username' => 'u', 'password' => 'p', 'root' => '', 'port' => 22, 'timeout' => 10, 'privateKey' => 'k', 'passphrase' => 'x', 'useAgent' => true, 'maxTries' => 3, 'hostFingerprint' => 'f']],
+            'Gcs (core sample)' => [['type' => 'Gcs', 'keyFilePath' => '', 'projectId' => '', 'bucket' => '', 'root' => '']],
+            'Gcs' => [['type' => 'Gcs', 'project' => 'p', 'keyFilePath' => '', 'bucket' => 'b', 'prefix' => 'x']],
+            'Webdav' => [['type' => 'Webdav', 'baseUri' => 'https://dav.example', 'userName' => 'u', 'password' => 'p', 'prefix' => '', 'authType' => 1, 'proxy' => 'http://proxy', 'encoding' => 1]],
+        ];
+    }
+
+    public function testPdoMysqlMayUseTheMysqlOnlyOptions(): void
+    {
+        $this->assertConfigurationIsValid([['database' => ['dev' => ['type' => 'pdo_mysql', 'singleTransaction' => true, 'socket' => '/s']]]]);
+    }
+
     public function testTypesRemovedFromTheCoreLibraryAreRejected(): void
     {
         foreach (['B2', 'Rackspace', 'DropboxV2'] as $type) {

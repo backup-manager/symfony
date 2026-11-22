@@ -84,6 +84,17 @@ class BundleInitializationTest extends TestCase
         $this->assertSame(0, $exitCode);
     }
 
+    public function testCompressionWithoutAValueMeansNone(): void
+    {
+        $application = $this->applicationWithManager($manager = $this->createStub(Manager::class));
+        $backup = $this->createMock(\BackupManager\Procedures\BackupProcedure::class);
+        $manager->method('makeBackup')->willReturn($backup);
+        $backup->expects($this->once())->method('run')->with('development', $this->anything(), 'null');
+
+        $tester = new CommandTester($application->find('backup-manager:backup'));
+        $this->assertSame(0, $tester->execute(['database' => 'development', 'destinations' => ['local'], '--compression' => null]));
+    }
+
     public function testTheRestoreCommandRunsARestore(): void
     {
         $application = $this->applicationWithManager($manager = $this->createStub(Manager::class));

@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * A minimal application kernel with this bundle, for Symfony 3.4 to 8.
+ * A minimal application kernel with this bundle, for Symfony 6.4 to 8.
  */
 class TestKernel extends Kernel
 {

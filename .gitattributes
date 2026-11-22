@@ -7,4 +7,3 @@
 /phpunit.xml.dist export-ignore
 /psalm.xml export-ignore
 /Tests export-ignore
-/UPGRADE.md export-ignore
