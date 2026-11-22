@@ -3,3 +3,4 @@
 /.phpunit.result.cache
 /.phpunit.cache
 /Tests/Functional/config/reference.php
+/.php-cs-fixer.cache

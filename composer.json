@@ -24,29 +24,30 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
-        "backup-manager/backup-manager": "^3.3",
+        "php": "^8.2",
+        "backup-manager/backup-manager": "^4.1",
+        "league/flysystem": "^3.35.3",
         "nyholm/dsn": "^2.0",
-        "symfony/config": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "symfony/console": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "symfony/dependency-injection": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "symfony/filesystem": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "symfony/framework-bundle": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "symfony/http-kernel": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "symfony/process": "^5.4.51 || ^6.4.33 || ^7.4.5 || ^8.0.5",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
+        "symfony/config": "^6.4.50 || ^7.4.23 || ^8.1.11",
+        "symfony/console": "^6.4 || ^7.4 || ^8.1",
+        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.1",
+        "symfony/filesystem": "^6.4.50 || ^7.4.23 || ^8.1.11",
+        "symfony/framework-bundle": "^6.4.49 || ^7.4.23 || ^8.1.11",
+        "symfony/http-kernel": "^6.4.50 || ^7.4.23 || ^8.1.11",
+        "symfony/process": "^6.4.33 || ^7.4.5 || ^8.1",
+        "symfony/yaml": "^6.4.50 || ^7.4.23 || ^8.1.11"
     },
     "require-dev": {
-        "matthiasnoback/symfony-config-test": "^4.1 || ^5.1 || ^6.0",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.1 || ^5.1 || ^6.0",
-        "phpunit/phpunit": "^9.6 || ^10.5 || ^11.5 || ^12.5"
+        "matthiasnoback/symfony-config-test": "^5.1 || ^6.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^5.1 || ^6.0",
+        "phpunit/phpunit": "^10.5.35 || ^11.5.50 || ^12.5.8"
     },
     "suggest": {
-        "league/flysystem-async-aws-s3": "AsyncAwsS3 storage type (Flysystem 2/3)",
+        "league/flysystem-async-aws-s3": "AsyncAwsS3 storage type",
         "league/flysystem-aws-s3-v3": "AwsS3 storage type",
-        "league/flysystem-ftp": "Ftp storage type (Flysystem 2/3)",
-        "league/flysystem-google-cloud-storage": "Gcs storage type (Flysystem 2/3)",
-        "league/flysystem-sftp-v3": "Sftp storage type (Flysystem 3)",
+        "league/flysystem-ftp": "Ftp storage type",
+        "league/flysystem-google-cloud-storage": "Gcs storage type",
+        "league/flysystem-sftp-v3": "Sftp storage type",
         "league/flysystem-webdav": "Webdav storage type",
         "spatie/flysystem-dropbox": "Dropbox storage type"
     },
@@ -63,7 +64,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.x-dev"
+            "dev-master": "4.x-dev"
         }
     },
     "scripts": {

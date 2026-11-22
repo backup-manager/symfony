@@ -2,6 +2,31 @@
 
 ## UNRELEASED
 
+## 4.0.0
+
+Requires PHP 8.2, Symfony 6.4, 7.4 or 8.1+, and backup-manager 4.1. See
+[UPGRADE.md](UPGRADE.md).
+
+### Changed
+
+- Requires `backup-manager/backup-manager` ^4.1 (Flysystem 3), PHP 8.2+, and
+  Symfony components at releases patched for known advisories (6.4.50+,
+  7.4.23+, 8.1.11+). Symfony 5.4 stays on 3.x.
+- `BMBackupManagerExtension` extends the DependencyInjection component's
+  `Extension`, avoiding the Symfony 8.1 deprecation of the HttpKernel one.
+- Classes are `final` (except the bundle), with native types and
+  `strict_types`; PHPStan level 8, Psalm level 2 and PHP-CS-Fixer run in CI.
+- The `Dropbox` storage type accepts only `token` and `root`.
+- `type: pdo_mysql` databases may use the MySQL-only options; the
+  MySQL-only error names the database and key. Invalid storage keys are
+  reported correctly (the message listed the allowed keys as invalid).
+
+### Removed
+
+- The `B2`, `Rackspace` and `DropboxV2` storage types and their services,
+  removed from core 4.0.
+
+
 ## 3.3.0
 
 ### Added

@@ -1,120 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BM\BackupManagerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * Keys each storage type accepts besides "type"; they are the keys the
+     * core filesystem factories read.
      */
+    private const STORAGE_KEYS = [
+        'Local' => ['root'],
+        'AwsS3' => ['key', 'secret', 'region', 'version', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'],
+        'AsyncAwsS3' => ['key', 'secret', 'region', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'],
+        'Dropbox' => ['token', 'root'],
+        'Ftp' => ['host', 'username', 'password', 'root', 'port', 'passive', 'ssl', 'timeout'],
+        'Sftp' => ['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'],
+        'Gcs' => ['project', 'keyFilePath', 'bucket', 'prefix', 'root'],
+        'Webdav' => ['baseUri', 'userName', 'password', 'prefix'],
+    ];
+
+    /**
+     * Database options the core library reads for MySQL only.
+     */
+    private const MYSQL_ONLY_KEYS = ['ignoreTables', 'onlyTables', 'ssl', 'singleTransaction', 'columnStatistics', 'socket'];
+
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        if (method_exists(TreeBuilder::class, 'getRootNode')) {
-            $treeBuilder = new TreeBuilder('bm_backup_manager');
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $treeBuilder = new TreeBuilder();
-            $rootNode = $treeBuilder->root('bm_backup_manager');
-        }
+        $treeBuilder = new TreeBuilder('bm_backup_manager');
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->variableNode('storage')
                     ->validate()
-                        ->always(function ($storageConfig) {
-                            foreach ($storageConfig as $name => $config) {
-                                if (!isset($config['type'])) {
-                                    throw new InvalidConfigurationException(sprintf('You must define a "type" for storage "%s"', $name));
-                                }
-
-                                switch ($config['type']) {
-                                    case 'Local':
-                                        $this->validateAuthenticationType(['root'], $config, 'Local');
-                                        break;
-                                    case 'AwsS3':
-                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'], $config, 'AwsS3');
-                                        break;
-                                    case 'AsyncAwsS3':
-                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'], $config, 'AsyncAwsS3');
-                                        break;
-                                    case 'B2':
-                                        $this->validateAuthenticationType(['key', 'accountId', 'bucket'], $config, 'B2');
-                                        break;
-                                    case 'Rackspace':
-                                        $this->validateAuthenticationType(['username', 'password', 'container'], $config, 'Rackspace');
-                                        break;
-                                    case 'Dropbox':
-                                        $this->validateAuthenticationType(['token', 'key', 'secret', 'app', 'root'], $config, 'Dropbox');
-                                        break;
-                                    case 'DropboxV2':
-                                        $this->validateAuthenticationType(['token', 'root'], $config, 'DropboxV2');
-                                        break;
-                                    case 'Ftp':
-                                        $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'passive', 'ssl', 'timeout'], $config, 'Ftp');
-                                        break;
-                                    case 'Sftp':
-                                        $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'], $config, 'Sftp');
-                                        break;
-                                    case 'Gcs':
-                                        $this->validateAuthenticationType(['project', 'keyFilePath', 'bucket', 'prefix', 'root'], $config, 'Gcs');
-                                        break;
-                                    case 'Webdav':
-                                        $this->validateAuthenticationType(['baseUri', 'userName', 'password', 'prefix'], $config, 'Webdav');
-                                        break;
-                                    default:
-                                        $validTypes = ['Local', 'AwsS3', 'AsyncAwsS3', 'B2', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp', 'Gcs', 'Webdav'];
-                                        throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
-                                }
+                        ->always(static function (mixed $storageConfig): mixed {
+                            foreach ((array) $storageConfig as $name => $config) {
+                                self::validateStorage((string) $name, (array) $config);
                             }
 
                             return $storageConfig;
                         })
                     ->end()
-
-                ->end() // End storage
-
+                ->end()
                 ->arrayNode('database')
                     ->validate()
-                        ->ifTrue(function ($databases) {
-                            $valid = true;
-                            foreach ($databases as $name => $d) {
-                                if (isset($d['dsn'])) {
-                                    // We cannot resolve the DSN now. It might be a environment variable.
-                                    continue;
-                                }
-                                if (empty($d['type'])) {
-                                    throw new InvalidConfigurationException(sprintf('You must define a "type" or "dsn" for database "%s"', $name));
-                                }
-                                if ($d['type'] !== 'mysql') {
-                                    // If not "mysql" we have to make sure these parameter are set to default
-                                    $valid = $valid && empty($d['ignoreTables']) && empty($d['ssl']) && empty($d['singleTransaction'])
-                                        && empty($d['onlyTables']) && !isset($d['columnStatistics']) && empty($d['socket']);
-                                }
+                        ->always(static function (array $databases): array {
+                            foreach ($databases as $name => $database) {
+                                self::validateDatabase((string) $name, $database);
                             }
 
-                            return !$valid;
-                        })
-                        ->thenInvalid('Keys "ignoreTables", "onlyTables", "ssl", "singleTransaction", "columnStatistics" and "socket" are only valid on MySQL databases.')
-                    ->end()
-                    ->validate()
-                        ->always(function ($databases) {
-                            foreach ($databases as &$database) {
-                                if (empty($database['ignoreTables'])) {
-                                    unset($database['ignoreTables']);
+                            return array_map(static function (array $database): array {
+                                foreach (['ignoreTables', 'onlyTables'] as $key) {
+                                    if (empty($database[$key])) {
+                                        unset($database[$key]);
+                                    }
                                 }
-                                if (empty($database['onlyTables'])) {
-                                    unset($database['onlyTables']);
-                                }
-                            }
-                            return $databases;
+
+                                return $database;
+                            }, $databases);
                         })
                     ->end()
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->scalarNode('type')->end()
                             ->scalarNode('host')->end()
@@ -126,47 +78,74 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('singleTransaction')->end()
                             ->booleanNode('ssl')->end()
                             ->scalarNode('extraParams')->end()
-                            ->arrayNode('ignoreTables')
-                                 ->prototype('scalar')->end()
-                            ->end()
-                            ->arrayNode('onlyTables')
-                                 ->prototype('scalar')->end()
-                            ->end()
+                            ->arrayNode('ignoreTables')->scalarPrototype()->end()->end()
+                            ->arrayNode('onlyTables')->scalarPrototype()->end()->end()
                             ->booleanNode('columnStatistics')->end()
                             ->scalarNode('socket')->end()
                         ->end()
                     ->end()
                 ->end()
                 ->scalarNode('output_file_prefix')->info('Use as a prefix for default backup filename')->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }
 
     /**
-     * Validate that the configuration fragment has the specified keys and none other.
-     *
-     * @param array  $expected Fields that must exist
-     * @param array  $actual   Actual configuration hashmap
-     * @param string $typeName Name of storage type for error messages
-     *
-     * @throws InvalidConfigurationException If $actual does not have exactly the keys specified in $expected (plus 'type')
+     * @param array<mixed> $config
      */
-    private function validateAuthenticationType(array $expected, array $actual, $typeName)
+    private static function validateStorage(string $name, array $config): void
     {
-        unset($actual['type']);
-        $actual = array_keys($actual);
-
-        if (empty(array_diff($actual, $expected))) {
-            return;
+        if (!isset($config['type'])) {
+            throw new InvalidConfigurationException(sprintf('You must define a "type" for storage "%s"', $name));
+        }
+        $type = $config['type'];
+        if (!is_string($type) || !isset(self::STORAGE_KEYS[$type])) {
+            throw new InvalidConfigurationException(sprintf(
+                'Type must be one of "%s", got "%s"',
+                implode(', ', array_keys(self::STORAGE_KEYS)),
+                is_scalar($type) ? (string) $type : get_debug_type($type)
+            ));
         }
 
-        throw new InvalidConfigurationException(sprintf(
-            'Storage type "%s" received invalid key "%s". Please choose one of "%s".',
-            $typeName,
-            implode(', ', $expected),
-            implode(', ', $actual)
-        ));
+        unset($config['type']);
+        $unknown = array_diff(array_map('strval', array_keys($config)), self::STORAGE_KEYS[$type]);
+        if ($unknown !== []) {
+            throw new InvalidConfigurationException(sprintf(
+                'Storage type "%s" received invalid key "%s". Please choose one of "%s".',
+                $type,
+                implode(', ', $unknown),
+                implode(', ', self::STORAGE_KEYS[$type])
+            ));
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $database
+     */
+    private static function validateDatabase(string $name, array $database): void
+    {
+        if (isset($database['dsn'])) {
+            // A DSN cannot be resolved yet; it may be an environment variable.
+            return;
+        }
+        if (empty($database['type'])) {
+            throw new InvalidConfigurationException(sprintf('You must define a "type" or "dsn" for database "%s"', $name));
+        }
+        if (in_array(strtolower((string) $database['type']), ['mysql', 'pdo_mysql'], true)) {
+            return;
+        }
+        foreach (self::MYSQL_ONLY_KEYS as $key) {
+            // columnStatistics is rejected when set at all; false is its only useful value.
+            $isSet = $key === 'columnStatistics' ? isset($database[$key]) : !empty($database[$key]);
+            if ($isSet) {
+                throw new InvalidConfigurationException(sprintf(
+                    'Keys "%s" are only valid on MySQL databases; database "%s" has "%s".',
+                    implode('", "', self::MYSQL_ONLY_KEYS),
+                    $name,
+                    $key
+                ));
+            }
+        }
     }
 }

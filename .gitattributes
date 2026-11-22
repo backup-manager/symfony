@@ -2,5 +2,9 @@
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
+/.php-cs-fixer.php export-ignore
+/phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
+/psalm.xml export-ignore
 /Tests export-ignore
+/UPGRADE.md export-ignore

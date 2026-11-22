@@ -26,16 +26,8 @@ services:
         class:  BackupManager\Filesystems\AsyncAwsS3Filesystem
         public: false
 
-    backup_manager.filesystems.b2_filesystem:
-        class:  BackupManager\Filesystems\BackblazeFilesystem
-        public: false
-
     backup_manager.filesystems.dropbox_filesystem:
         class:  BackupManager\Filesystems\DropboxFilesystem
-        public: false
-
-    backup_manager.filesystems.dropbox_v2_filesystem:
-        class:  BackupManager\Filesystems\DropboxV2Filesystem
         public: false
 
     backup_manager.filesystems.ftp_filesystem:
@@ -44,10 +36,6 @@ services:
 
     backup_manager.filesystems.local_filesystem:
         class:  BackupManager\Filesystems\LocalFilesystem
-        public: false
-
-    backup_manager.filesystems.rackspace_filesystem:
-        class:  BackupManager\Filesystems\RackspaceFilesystem
         public: false
 
     backup_manager.filesystems.sftp_filesystem:

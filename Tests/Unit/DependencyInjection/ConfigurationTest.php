@@ -35,7 +35,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'are only valid on MySQL databases.'
+            'only valid on MySQL databases; database "dev" has "ignoreTables"'
         );
     }
 
@@ -71,7 +71,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'are only valid on MySQL databases.'
+            'only valid on MySQL databases; database "dev" has "ssl"'
         );
     }
 
@@ -112,7 +112,7 @@ class ConfigurationTest extends TestCase
                     ],
                 ]
             ),
-            'are only valid on MySQL databases.'
+            'only valid on MySQL databases; database "dev" has "singleTransaction"'
         );
     }
 
@@ -179,8 +179,23 @@ class ConfigurationTest extends TestCase
     public static function validStorageTypes(): array
     {
         return [
-            ['Local'], ['AwsS3'], ['AsyncAwsS3'], ['B2'], ['Rackspace'], ['Dropbox'], ['DropboxV2'], ['Ftp'], ['Sftp'], ['Gcs'], ['Webdav'],
+            ['Local'], ['AwsS3'], ['AsyncAwsS3'], ['Dropbox'], ['Ftp'], ['Sftp'], ['Gcs'], ['Webdav'],
         ];
+    }
+
+    public function testTypesRemovedFromTheCoreLibraryAreRejected(): void
+    {
+        foreach (['B2', 'Rackspace', 'DropboxV2'] as $type) {
+            $this->assertConfigurationIsInvalid([['storage' => ['old' => ['type' => $type]]]], 'Type must be one of');
+        }
+    }
+
+    public function testAnUnknownStorageKeyIsNamedInTheError(): void
+    {
+        $this->assertConfigurationIsInvalid(
+            [['storage' => ['box' => ['type' => 'Dropbox', 'token' => 't', 'app' => 'x']]]],
+            'Storage type "Dropbox" received invalid key "app"'
+        );
     }
 
     public function testMysqlOnlyOptionsAreValidOnMysql(): void
@@ -200,7 +215,7 @@ class ConfigurationTest extends TestCase
         foreach ([['onlyTables' => ['users']], ['columnStatistics' => false], ['socket' => '/tmp/s']] as $option) {
             $this->assertConfigurationIsInvalid(
                 [['database' => ['dev' => ['type' => 'postgresql'] + $option]]],
-                'only valid on MySQL databases'
+                'are only valid on MySQL databases; database "dev" has "' . array_key_first($option) . '"'
             );
         }
     }
