@@ -217,6 +217,14 @@ Requirements
 - PostgreSQL support requires `pg_dump` and `psql` command-line binaries
 - Gzip support requires `gzip` and `gunzip` command-line binaries
 
+Supported versions
+==================
+
+| Version | Symfony | PHP | Core library | Support |
+|---|---|---|---|---|
+| 4.x | 6.4, 7.4, 8.1+ | 8.2+ | 4.x | active |
+| 3.x | 5.4–8.1+ | 7.4+ | 3.x | security fixes until 2027-12-31 |
+
 Changelog
 =========
 
