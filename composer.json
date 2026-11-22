@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "backup-manager/backup-manager": "^4.1",
+        "backup-manager/backup-manager": "^4.1.1",
         "league/flysystem": "^3.35.3",
         "nyholm/dsn": "^2.0",
         "symfony/config": "^6.4.50 || ^7.4.23 || ^8.1.11",

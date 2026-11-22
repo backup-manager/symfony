@@ -2,6 +2,16 @@
 
 ## UNRELEASED
 
+## 4.0.1
+
+### Security
+
+- Requires `backup-manager/backup-manager` ^4.1.1, which restores MySQL dumps through stdin; a backup file name containing a newline could run mysql client commands during a restore.
+
+### Documentation
+
+- 4.x is the active line; 3.x receives security fixes until 2027-12-31.
+
 ## 4.0.0
 
 Requires PHP 8.2, Symfony 6.4, 7.4 or 8.1+, and backup-manager 4.1. See
