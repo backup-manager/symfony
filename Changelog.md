@@ -2,9 +2,36 @@
 
 ## UNRELEASED
 
+## 3.3.0
+
 ### Added
 
-- Add option 'extraParams' for database's config
+- Support for Symfony 7 and 8, and Symfony 6 and PHP 8.1+ in a release
+  (#87, merged earlier; #89, #90).
+- Flysystem 2 and 3 support through backup-manager 3.3 (#91).
+- `AsyncAwsS3` storage type, using async-aws instead of the AWS SDK (#84),
+  and `Webdav` storage type.
+- MySQL options `onlyTables`, `columnStatistics` and `socket`; AwsS3 option
+  `use_path_style_endpoint`; Gcs option `root`.
+- Option `extraParams` for database configs (#82).
+- Tests on GitHub Actions for Symfony 3.4 to 8 and PHP 7.4 to 8.5.
+
+### Changed
+
+- Requires `backup-manager/backup-manager` ^3.3 and PHP 7.4+;
+  `symfony/process` requires a release patched for CVE-2024-51736 and
+  CVE-2026-24739.
+- A storage type whose adapter package is missing is reported by the core
+  library when the storage is used (naming the package for the installed
+  Flysystem version), instead of by this bundle when the container is built.
+  The old check only knew Flysystem 1 class names and rejected every storage
+  on Flysystem 2 and 3.
+- Commands are registered lazily (`#[AsCommand]`).
+
+### Fixed
+
+- Configuration in `config/packages/bm_backup_manager.yml` is loaded with
+  Flex (#88; fixed on master after 3.2.1).
 
 ## 3.2.0
 

@@ -7,6 +7,7 @@ use BackupManager\Config\Config;
 use BackupManager\Filesystems\Destination;
 use BackupManager\Filesystems\FilesystemProvider;
 use BackupManager\Manager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
+#[AsCommand(name: 'backup-manager:restore')]
 class RestoreCommand extends Command
 {
     protected static $defaultName = 'backup-manager:restore';
@@ -38,7 +40,7 @@ class RestoreCommand extends Command
     }
 
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::$defaultName)

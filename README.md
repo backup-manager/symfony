@@ -1,12 +1,14 @@
 BackupManagerBundle
 ===================
 
-[![Latest Stable Version](https://poser.pugx.org/backup-manager/symfony/version.png)](https://packagist.org/packages/backup-manager/symfony)
-[![License](https://poser.pugx.org/backup-manager/symfony/license.png)](https://packagist.org/packages/backup-manager/symfony)
-[![Build Status](https://travis-ci.org/backup-manager/symfony.svg?branch=master)](https://travis-ci.org/backup-manager/symfony)
-[![Total Downloads](https://poser.pugx.org/backup-manager/symfony/downloads.png)](https://packagist.org/packages/backup-manager/symfony)
+[![Tests](https://github.com/backup-manager/symfony/actions/workflows/tests.yml/badge.svg)](https://github.com/backup-manager/symfony/actions/workflows/tests.yml)
+[![Latest Version](https://img.shields.io/packagist/v/backup-manager/symfony)](https://packagist.org/packages/backup-manager/symfony)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/backup-manager/symfony/php)](https://packagist.org/packages/backup-manager/symfony)
+[![Symfony](https://img.shields.io/badge/Symfony-5.4%20%7C%206.4%20%7C%207.4%20%7C%208-000000?logo=symfony&logoColor=white)](#requirements)
+[![Downloads](https://img.shields.io/packagist/dt/backup-manager/symfony)](https://packagist.org/packages/backup-manager/symfony/stats)
+[![License](https://img.shields.io/packagist/l/backup-manager/symfony)](LICENSE)
 
-A simple database backup manager for Symfony with support for S3, Rackspace, Dropbox, FTP, SFTP.
+Back up and restore MySQL and PostgreSQL databases from your Symfony application to S3, Google Cloud Storage, Dropbox, FTP, SFTP, WebDAV or local disk.
 
 This package pulls in the framework agnostic [Backup Manager](https://github.com/backup-manager/backup-manager) and provides seamless integration with **Symfony**.
 
@@ -65,8 +67,16 @@ bm_backup_manager:
             pass: password
             database: test
             ignoreTables: ['foo', 'bar']
+            # MySQL only, all optional:
+            # onlyTables: ['users', 'orders']   # dump only these tables
+            # singleTransaction: true           # --single-transaction (InnoDB)
+            # ssl: true                         # --ssl
+            # columnStatistics: false           # --column-statistics=0 (MySQL 8 mysqldump, older servers)
+            # socket: /run/mysqld/mysqld.sock   # instead of host and port
+            # extraParams: '--max-allowed-packet=64M'
 
-            # If DSN is specified, it will override other values
+            # If DSN is specified, it will override other values. User and
+            # password must be url-encoded (e.g. "p@ss" as "p%40ss").
             dsn: 'mysql://root:root_pass@127.0.0.1:3306/test_db'
         production:
             type: postgresql
@@ -90,23 +100,31 @@ bm_backup_manager:
             version: latest
             bucket:
             root:
-        b2:
-            type: B2
-            key:
-            accountId:
-            bucket:
-        rackspace:
-            type: Rackspace
-            username:
-            password:
-            container:
-        dropbox:
-            type: DropboxV2
-            token:
+        # S3-compatible services (DigitalOcean Spaces, MinIO, ...) also set
+        # endpoint: and use_path_style_endpoint:
+        async_s3:
+            type: AsyncAwsS3   # async-aws instead of the AWS SDK (Flysystem 2/3)
             key:
             secret:
-            app:
+            region: us-east-1
+            bucket:
             root:
+        gcs:
+            type: Gcs
+            project:
+            keyFilePath:
+            bucket:
+            prefix:
+        dropbox:
+            type: Dropbox
+            token:
+            root:
+        webdav:
+            type: Webdav
+            baseUri:
+            userName:
+            password:
+            prefix:
         ftp:
             type: Ftp
             host:
@@ -123,7 +141,7 @@ bm_backup_manager:
             username:
             password:
             root:
-            port: 21
+            port: 22
             timeout: 10
             privateKey:
 ```
@@ -186,7 +204,21 @@ php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip
 Requirements
 ============
 
-- PHP 7.3
+- PHP 7.4+
+- Symfony 5.4, 6.4, 7.4 or 8 (3.4 and 4.4 still install but are past end of
+  life). CI tests each.
+- The Flysystem adapter package for each storage type you use, for example
+  `league/flysystem-aws-s3-v3` for `AwsS3`; see the
+  [core adapter table](https://github.com/backup-manager/backup-manager/tree/3.x#installation).
+  A missing package is reported, with the package name, when the storage is
+  used.
+- The `B2`, `Rackspace` and `DropboxV2` types only work with Flysystem 1 and
+  are deprecated.
 - MySQL support requires `mysqldump` and `mysql` command-line binaries
 - PostgreSQL support requires `pg_dump` and `psql` command-line binaries
 - Gzip support requires `gzip` and `gunzip` command-line binaries
+
+Changelog
+=========
+
+See [Changelog.md](Changelog.md).

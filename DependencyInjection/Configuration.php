@@ -37,7 +37,10 @@ class Configuration implements ConfigurationInterface
                                         $this->validateAuthenticationType(['root'], $config, 'Local');
                                         break;
                                     case 'AwsS3':
-                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root', 'endpoint'], $config, 'AwsS3');
+                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'version', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'], $config, 'AwsS3');
+                                        break;
+                                    case 'AsyncAwsS3':
+                                        $this->validateAuthenticationType(['key', 'secret', 'region', 'bucket', 'root', 'endpoint', 'use_path_style_endpoint'], $config, 'AsyncAwsS3');
                                         break;
                                     case 'B2':
                                         $this->validateAuthenticationType(['key', 'accountId', 'bucket'], $config, 'B2');
@@ -58,10 +61,13 @@ class Configuration implements ConfigurationInterface
                                         $this->validateAuthenticationType(['host', 'username', 'password', 'root', 'port', 'timeout', 'privateKey'], $config, 'Sftp');
                                         break;
                                     case 'Gcs':
-                                        $this->validateAuthenticationType(['project', 'keyFilePath', 'bucket', 'prefix'], $config, 'Gcs');
+                                        $this->validateAuthenticationType(['project', 'keyFilePath', 'bucket', 'prefix', 'root'], $config, 'Gcs');
+                                        break;
+                                    case 'Webdav':
+                                        $this->validateAuthenticationType(['baseUri', 'userName', 'password', 'prefix'], $config, 'Webdav');
                                         break;
                                     default:
-                                        $validTypes = ['Local', 'AwsS3', 'B2', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp', 'Gcs'];
+                                        $validTypes = ['Local', 'AwsS3', 'AsyncAwsS3', 'B2', 'Rackspace', 'Dropbox', 'DropboxV2', 'Ftp', 'Sftp', 'Gcs', 'Webdav'];
                                         throw new InvalidConfigurationException(sprintf('Type must be one of "%s", got "%s"', implode(', ', $validTypes), $config['type']));
                                 }
                             }
@@ -86,19 +92,23 @@ class Configuration implements ConfigurationInterface
                                 }
                                 if ($d['type'] !== 'mysql') {
                                     // If not "mysql" we have to make sure these parameter are set to default
-                                    $valid = $valid && empty($d['ignoreTables']) && empty($d['ssl']) && empty($d['singleTransaction']);
+                                    $valid = $valid && empty($d['ignoreTables']) && empty($d['ssl']) && empty($d['singleTransaction'])
+                                        && empty($d['onlyTables']) && !isset($d['columnStatistics']) && empty($d['socket']);
                                 }
                             }
 
                             return !$valid;
                         })
-                        ->thenInvalid('Keys "ignoreTables", "ssl" and "singleTransaction" are only valid on MySQL databases.')
+                        ->thenInvalid('Keys "ignoreTables", "onlyTables", "ssl", "singleTransaction", "columnStatistics" and "socket" are only valid on MySQL databases.')
                     ->end()
                     ->validate()
                         ->always(function ($databases) {
                             foreach ($databases as &$database) {
                                 if (empty($database['ignoreTables'])) {
                                     unset($database['ignoreTables']);
+                                }
+                                if (empty($database['onlyTables'])) {
+                                    unset($database['onlyTables']);
                                 }
                             }
                             return $databases;
@@ -119,6 +129,11 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode('ignoreTables')
                                  ->prototype('scalar')->end()
                             ->end()
+                            ->arrayNode('onlyTables')
+                                 ->prototype('scalar')->end()
+                            ->end()
+                            ->booleanNode('columnStatistics')->end()
+                            ->scalarNode('socket')->end()
                         ->end()
                     ->end()
                 ->end()

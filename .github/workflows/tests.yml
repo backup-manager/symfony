@@ -1,0 +1,100 @@
+name: Tests
+on:
+  push:
+  pull_request:
+  schedule:
+    # Weekly, so advisories published after the last push still surface.
+    - cron: '29 4 * * 1'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    name: Symfony ${{ matrix.symfony }}, PHP ${{ matrix.php }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # PHP 7.4 installs Flysystem 1 or 2, and Symfony 3.4/4.4 are past
+          # end of life; all have unpatched security advisories, which
+          # Composer blocks unless told not to. Users on them make the same
+          # choice.
+          - { symfony: '3.4.*', php: '7.4', legacy: true }
+          - { symfony: '4.4.*', php: '7.4', legacy: true }
+          - { symfony: '5.4.*', php: '7.4', legacy: true }
+          - { symfony: '5.4.*', php: '8.1' }
+          - { symfony: '6.4.*', php: '8.1' }
+          - { symfony: '6.4.*', php: '8.3' }
+          - { symfony: '7.4.*', php: '8.2' }
+          - { symfony: '7.4.*', php: '8.4' }
+          - { symfony: '8.*',   php: '8.4' }
+          - { symfony: '8.*',   php: '8.5' }
+
+    env:
+      SYMFONY_REQUIRE: ${{ matrix.symfony }}
+
+    steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: flex
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Allow packages with advisories (legacy cells)
+        if: matrix.legacy
+        run: composer config audit.block-insecure false
+
+      - name: Download dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+
+      - name: Show resolved key packages
+        run: composer show | grep -E '^(backup-manager/backup-manager|league/flysystem |phpunit/phpunit|symfony/(framework-bundle|process) )'
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+  audit:
+    name: Composer audit
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Download dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+
+      - name: Audit dependencies for security advisories
+        run: composer audit
+
+  composer-normalize:
+    name: Composer Normalize
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer-normalize
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Normalize
+        run: composer-normalize --dry-run

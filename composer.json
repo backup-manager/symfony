@@ -1,9 +1,18 @@
 {
     "name": "backup-manager/symfony",
-    "description": "A simple database backup manager for Symfony2 with support for S3, Rackspace, Dropbox, FTP, SFTP.",
-    "keywords": ["database","backup","Symfony","S3","Rackspace","Dropbox","FTP","SFTP"],
-    "type": "symfony-bundle",
+    "description": "Database backup manager bundle for Symfony: back up and restore MySQL and PostgreSQL to S3, Google Cloud Storage, Dropbox, FTP, SFTP, WebDAV and more.",
     "license": "MIT",
+    "type": "symfony-bundle",
+    "keywords": [
+        "database",
+        "backup",
+        "symfony",
+        "bundle",
+        "mysql",
+        "postgresql",
+        "s3",
+        "flysystem"
+    ],
     "authors": [
         {
             "name": "Tobias Nyholm",
@@ -15,45 +24,49 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
-        "backup-manager/backup-manager": "^3.0",
+        "php": "^7.4 || ^8.0",
+        "backup-manager/backup-manager": "^3.3",
         "nyholm/dsn": "^2.0",
-        "symfony/config": "^3.4 || ^4.4 || ^5.0 || ^6.0",
-        "symfony/console": "^3.4 || ^4.4 || ^5.0 || ^6.0",
-        "symfony/dependency-injection": "^3.4 || ^4.4 || ^5.0 || ^6.0",
-        "symfony/filesystem": "^3.4 || ^4.4 || ^5.0 || ^6.0",
-        "symfony/framework-bundle": "^3.4 || ^4.4 || ^5.0 || ^6.0",
-        "symfony/http-kernel": "^3.4 || ^4.4 || ^5.0 || ^6.0",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5.0 || ^6.0"
+        "symfony/config": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/console": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/dependency-injection": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/filesystem": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/framework-bundle": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/http-kernel": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/process": "^5.4.51 || ^6.4.33 || ^7.4.5 || ^8.0.5",
+        "symfony/yaml": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
     },
     "require-dev": {
-        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
-        "matthiasnoback/symfony-config-test": "^4.1",
-        "nyholm/symfony-bundle-test": "^1.6",
-        "superbalist/flysystem-google-storage": "^6.0 || ^7.0",
-        "symfony/phpunit-bridge": "^5.0"
+        "matthiasnoback/symfony-config-test": "^4.3 || ^5.1 || ^6.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.3 || ^5.1 || ^6.0",
+        "phpunit/phpunit": "^9.6 || ^10.5 || ^11.5 || ^12.5"
     },
     "suggest": {
-        "league/flysystem-aws-s3-v3": "To use AWS S3, version 3",
-        "mhetreramesh/flysystem-backblaze": "To use B2",
-        "srmklive/flysystem-dropbox-v2": "To use Dropbox",
-        "superbalist/flysystem-google-storage": "Google Cloud Storage adapter support.",
-        "league/flysystem-rackspace": "To use Rackspace",
-        "league/flysystem-sftp": "To use sftp"
+        "league/flysystem-async-aws-s3": "AsyncAwsS3 storage type (Flysystem 2/3)",
+        "league/flysystem-aws-s3-v3": "AwsS3 storage type",
+        "league/flysystem-ftp": "Ftp storage type (Flysystem 2/3)",
+        "league/flysystem-google-cloud-storage": "Gcs storage type (Flysystem 2/3)",
+        "league/flysystem-sftp-v3": "Sftp storage type (Flysystem 3)",
+        "league/flysystem-webdav": "Webdav storage type",
+        "spatie/flysystem-dropbox": "Dropbox storage type"
     },
     "autoload": {
-        "psr-4": { "BM\\BackupManagerBundle\\": "" }
-    },
-    "scripts": {
-        "test": "vendor/bin/simple-phpunit",
-        "test-ci": "vendor/bin/simple-phpunit --coverage-text --coverage-clover=build/coverage.xml"
+        "psr-4": {
+            "BM\\BackupManagerBundle\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "config": {
         "sort-packages": true
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.2-dev"
+            "dev-master": "3.x-dev"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }

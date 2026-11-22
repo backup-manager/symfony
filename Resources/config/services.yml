@@ -4,13 +4,13 @@ services:
         class: BM\BackupManagerBundle\Command\BackupCommand
         arguments: ['@backup_manager', '']
         tags:
-            - { name: 'console.command' }
+            - { name: 'console.command', command: 'backup-manager:backup' }
 
     backup_manager.command.restore:
         class: BM\BackupManagerBundle\Command\RestoreCommand
         arguments: ['@backup_manager']
         tags:
-            - { name: 'console.command' }
+            - { name: 'console.command', command: 'backup-manager:restore' }
 
     # Storage
     backup_manager.config_storage:
@@ -20,6 +20,10 @@ services:
 
     backup_manager.filesystems.awss3_filesystem:
         class:  BackupManager\Filesystems\Awss3Filesystem
+        public: false
+
+    backup_manager.filesystems.async_awss3_filesystem:
+        class:  BackupManager\Filesystems\AsyncAwsS3Filesystem
         public: false
 
     backup_manager.filesystems.b2_filesystem:
@@ -52,6 +56,10 @@ services:
 
     backup_manager.filesystems.gcs_filesystem:
         class:  BackupManager\Filesystems\GcsFilesystem
+        public: false
+
+    backup_manager.filesystems.webdav_filesystem:
+        class:  BackupManager\Filesystems\WebdavFilesystem
         public: false
 
     backup_manager.filesystems:

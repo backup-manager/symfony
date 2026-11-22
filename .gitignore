@@ -1,4 +1,5 @@
-composer.lock
-phpunit.xml.dist
-vendor/*
-.phpunit.result.cache
+/vendor
+/composer.lock
+/.phpunit.result.cache
+/.phpunit.cache
+/Tests/Functional/config/reference.php

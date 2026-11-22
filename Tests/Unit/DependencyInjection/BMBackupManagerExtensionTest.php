@@ -19,7 +19,7 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    public function testReplacementOfConfig()
+    public function testReplacementOfConfig(): void
     {
         $storageConfig = ['local'=>['type'=>'Local', 'root'=>'/foo']];
         $dbConfig = ['dev'=>['type'=>'mysql']];
@@ -36,7 +36,7 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
     /**
      * Make sure we can have multiple storage names with the same type
      */
-    public function testCustomConfigNames()
+    public function testCustomConfigNames(): void
     {
         $storageConfig = ['foobar'=>['type'=>'Ftp', 'host' => 'foo', 'password' =>'xx', 'username'=>'x']];
         $dbConfig = ['dev'=>['type'=>'mysql']];
@@ -47,5 +47,18 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('backup_manager.config_storage', 0, $storageConfig);
+    }
+
+    public function testNewStorageTypesAreRegistered(): void
+    {
+        $this->load([
+            'storage' => [
+                's3' => ['type' => 'AsyncAwsS3', 'bucket' => 'b'],
+                'dav' => ['type' => 'Webdav', 'baseUri' => 'https://dav.example'],
+            ],
+        ]);
+
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('backup_manager.filesystems', 'add', [new \Symfony\Component\DependencyInjection\Reference('backup_manager.filesystems.async_awss3_filesystem')]);
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('backup_manager.filesystems', 'add', [new \Symfony\Component\DependencyInjection\Reference('backup_manager.filesystems.webdav_filesystem')]);
     }
 }
