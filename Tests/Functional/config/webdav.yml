@@ -1,0 +1,7 @@
+bm_backup_manager:
+    storage:
+        webdav:
+            type: Webdav
+            baseUri: 'https://dav.example'
+            userName: 'u'
+            password: 'p'

@@ -2,78 +2,109 @@
 
 namespace BM\BackupManagerBundle\Tests\Functional;
 
+use BackupManager\Filesystems\FilesystemAdapterMissing;
 use BackupManager\Manager;
-use BM\BackupManagerBundle\BMBackupManagerBundle;
-use Nyholm\BundleTest\BaseBundleTestCase;
-use Nyholm\BundleTest\CompilerPass\PublicServicePass;
+use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Filesystem\Filesystem;
 
-class BundleInitializationTest extends BaseBundleTestCase
+class BundleInitializationTest extends TestCase
 {
-    protected function getBundleClass(): string
+    /** @var TestKernel|null */
+    private $kernel;
+
+    protected function tearDown(): void
     {
-        return BMBackupManagerBundle::class;
-    }
-
-    protected function setUp(): void
-    {
-        $this->addCompilerPass(new PublicServicePass('|backup_manager.*|'));
-        $this->addCompilerPass(new PublicServicePass('|backup_manager|'));
-    }
-
-
-    public function testInitBundle()
-    {
-        // Create a new Kernel
-        $kernel = $this->createKernel();
-
-        // Add some configuration
-        $kernel->addConfigFile(__DIR__.'/config/minimal.yml');
-
-        // Boot the kernel.
-        $this->bootKernel();
-
-        // Get the container
-        $container = $this->getContainer();
-
-        // Test if you services exists
-        $this->assertTrue($container->has('backup_manager'));
-        $service = $container->get('backup_manager');
-        $this->assertInstanceOf(Manager::class, $service);
-    }
-
-    public function testNoConfig()
-    {
-        // Boot the kernel.
-        $this->bootKernel();
-
-        // Get the container
-        $container = $this->getContainer();
-
-        // Test if you services exists
-        $this->assertTrue($container->has('backup_manager'));
-        $service = $container->get('backup_manager');
-        $this->assertInstanceOf(Manager::class, $service);
-    }
-
-    public function testNoDependencies()
-    {
-        if (method_exists($this, 'expectException')) {
-            $this->expectException(\LogicException::class);
-        } else {
-            // Legacy
-            $this->setExpectedException(\LogicException::class);
+        if ($this->kernel !== null) {
+            $this->kernel->shutdown();
+            (new Filesystem())->remove($this->kernel->getCacheDir());
         }
+    }
 
-        // Create a new Kernel
-        $kernel = $this->createKernel();
+    private function boot(array $configFiles = []): TestKernel
+    {
+        $this->kernel = new TestKernel($configFiles);
+        $this->kernel->boot();
 
-        // Add some configuration
-        $kernel->addConfigFile(__DIR__.'/config/rackspace.yml');
+        return $this->kernel;
+    }
 
-        // Boot the kernel.
-        $this->bootKernel();
+    public function testInitBundle(): void
+    {
+        $container = $this->boot([__DIR__ . '/config/minimal.yml'])->getContainer();
 
-        // Get the container
-        $container = $this->getContainer();
+        $this->assertInstanceOf(Manager::class, $container->get('backup_manager'));
+        $this->assertInstanceOf(Manager::class, $container->get(Manager::class));
+    }
+
+    public function testNoConfig(): void
+    {
+        $this->assertInstanceOf(Manager::class, $this->boot()->getContainer()->get('backup_manager'));
+    }
+
+    public function testConfigIsLoaded(): void
+    {
+        $container = $this->boot([__DIR__ . '/config/minimal.yml'])->getContainer();
+
+        $this->assertSame('/path/to/working/directory', $container->get('backup_manager.filesystems')->getConfig('local', 'root'));
+        $this->assertSame('mysql', $container->get('backup_manager.config_database')->get('development', 'type'));
+    }
+
+    /**
+     * Adapter packages are checked when a storage is used, by the core
+     * library, for whichever Flysystem major is installed.
+     */
+    public function testAStorageWithoutItsAdapterPackageFailsWhenUsed(): void
+    {
+        $container = $this->boot([__DIR__ . '/config/webdav.yml'])->getContainer();
+
+        $this->expectException(FilesystemAdapterMissing::class);
+        $container->get('backup_manager.filesystems')->get('webdav');
+    }
+
+    public function testTheBackupCommandRunsABackup(): void
+    {
+        $application = $this->applicationWithManager($manager = $this->createStub(Manager::class));
+        $backup = $this->createMock(\BackupManager\Procedures\BackupProcedure::class);
+        $manager->method('makeBackup')->willReturn($backup);
+        $backup->expects($this->once())->method('run')->with(
+            'development',
+            $this->callback(function (array $destinations): bool {
+                return count($destinations) === 1
+                    && $destinations[0]->destinationFilesystem() === 'local'
+                    && $destinations[0]->destinationPath() === 'nightly.sql';
+            }),
+            'gzip'
+        );
+
+        $tester = new CommandTester($application->find('backup-manager:backup'));
+        $exitCode = $tester->execute(['database' => 'development', 'destinations' => ['local'], '--compression' => 'gzip', '--filename' => 'nightly.sql']);
+
+        $this->assertSame(0, $exitCode);
+    }
+
+    public function testTheRestoreCommandRunsARestore(): void
+    {
+        $application = $this->applicationWithManager($manager = $this->createStub(Manager::class));
+        $restore = $this->createMock(\BackupManager\Procedures\RestoreProcedure::class);
+        $manager->method('makeRestore')->willReturn($restore);
+        $restore->expects($this->once())->method('run')->with('local', 'nightly.sql.gz', 'development', 'gzip');
+
+        $tester = new CommandTester($application->find('backup-manager:restore'));
+        $exitCode = $tester->execute(['database' => 'development', 'destination' => 'local', 'file_path' => 'nightly.sql.gz', '--compression' => 'gzip']);
+
+        $this->assertSame(0, $exitCode);
+    }
+
+    /**
+     * @param Manager $manager a test double replacing the bundle's manager
+     */
+    private function applicationWithManager($manager): Application
+    {
+        $kernel = $this->boot([__DIR__ . '/config/minimal.yml']);
+        $kernel->getContainer()->set('backup_manager', $manager);
+
+        return new Application($kernel);
     }
 }

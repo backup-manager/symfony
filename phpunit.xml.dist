@@ -1,32 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="./vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         >
+<phpunit bootstrap="vendor/autoload.php" colors="true">
     <php>
-        <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="SHELL_VERBOSITY" value="-1"/>
     </php>
-
     <testsuites>
-        <testsuite name="Functional tests">
-            <directory suffix="Test.php">./Tests/Functional</directory>
-        </testsuite>
-        <testsuite name="Unit tests">
-            <directory suffix="Test.php">./Tests/Unit</directory>
+        <testsuite name="backup-manager/symfony">
+            <directory suffix="Test.php">Tests</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>
