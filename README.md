@@ -205,8 +205,8 @@ Requirements
 ============
 
 - PHP 7.4+
-- Symfony 5.4, 6.4, 7.4 or 8 (3.4 and 4.4 still install but are past end of
-  life). CI tests each.
+- Symfony 5.4, 6.4, 7.4 or 8.1+, at releases patched for known security
+  advisories. CI tests each.
 - The Flysystem adapter package for each storage type you use, for example
   `league/flysystem-aws-s3-v3` for `AwsS3`; see the
   [core adapter table](https://github.com/backup-manager/backup-manager/tree/3.x#installation).
