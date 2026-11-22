@@ -27,6 +27,11 @@
   The old check only knew Flysystem 1 class names and rejected every storage
   on Flysystem 2 and 3.
 - Commands are registered lazily (`#[AsCommand]`).
+- Native return types, required by Symfony 6+ where the parent methods
+  declare them: `BackupCommand::execute(): int` and `configure(): void`
+  (same for `RestoreCommand`), `BMBackupManagerExtension::load(): void`,
+  `Configuration::getConfigTreeBuilder(): TreeBuilder`. A subclass that
+  overrides one of these methods must declare the same return type.
 
 ### Fixed
 
