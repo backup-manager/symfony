@@ -37,8 +37,8 @@
         "symfony/yaml": "^3.4 || ^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
     },
     "require-dev": {
-        "matthiasnoback/symfony-config-test": "^4.3 || ^5.1 || ^6.0",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.3 || ^5.1 || ^6.0",
+        "matthiasnoback/symfony-config-test": "^4.1 || ^5.1 || ^6.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.1 || ^5.1 || ^6.0",
         "phpunit/phpunit": "^9.6 || ^10.5 || ^11.5 || ^12.5"
     },
     "suggest": {

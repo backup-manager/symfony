@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   phpunit:
-    name: Symfony ${{ matrix.symfony }}, PHP ${{ matrix.php }}
+    name: Symfony ${{ matrix.symfony }}, PHP ${{ matrix.php }}${{ matrix.flysystem && format(', Flysystem {0}', matrix.flysystem) || '' }}
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -28,6 +28,7 @@ jobs:
           - { symfony: '3.4.*', php: '7.4', legacy: true }
           - { symfony: '4.4.*', php: '7.4', legacy: true }
           - { symfony: '5.4.*', php: '7.4', legacy: true }
+          - { symfony: '5.4.*', php: '7.4', legacy: true, flysystem: '1' }
           - { symfony: '5.4.*', php: '8.1' }
           - { symfony: '6.4.*', php: '8.1' }
           - { symfony: '6.4.*', php: '8.3' }
@@ -53,6 +54,10 @@ jobs:
       - name: Allow packages with advisories (legacy cells)
         if: matrix.legacy
         run: composer config audit.block-insecure false
+
+      - name: Select Flysystem ${{ matrix.flysystem }}
+        if: matrix.flysystem
+        run: composer require --no-update "league/flysystem:^${{ matrix.flysystem }}"
 
       - name: Download dependencies
         uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
