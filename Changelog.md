@@ -6,14 +6,14 @@
 
 ### Added
 
-- Support for Symfony 7 and 8, and Symfony 6 and PHP 8.1+ in a release
-  (#87, merged earlier; #89, #90).
+- Support for Symfony 7 and 8, and Symfony 6 and PHP 8 in a release
+  (#87 by @trsteel88 and #83 by @benr77, merged earlier; #89, #90).
 - Flysystem 2 and 3 support through backup-manager 3.3 (#91).
 - `AsyncAwsS3` storage type, using async-aws instead of the AWS SDK (#84),
   and `Webdav` storage type.
 - MySQL options `onlyTables`, `columnStatistics` and `socket`; AwsS3 option
   `use_path_style_endpoint`; Gcs option `root`.
-- Option `extraParams` for database configs (#82).
+- Option `extraParams` for database configs (#82 by @Branlute).
 - Tests on GitHub Actions for Symfony 5.4 to 8 and PHP 7.4 to 8.5.
 
 ### Changed
