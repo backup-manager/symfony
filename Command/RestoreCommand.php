@@ -1,11 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BM\BackupManagerBundle\Command;
 
-
-use BackupManager\Config\Config;
-use BackupManager\Filesystems\Destination;
-use BackupManager\Filesystems\FilesystemProvider;
 use BackupManager\Manager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -15,53 +13,46 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Restore from backup.
- *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-#[AsCommand(name: 'backup-manager:restore')]
-class RestoreCommand extends Command
+#[AsCommand(name: 'backup-manager:restore', description: 'Restore from backup.')]
+final class RestoreCommand extends Command
 {
-    protected static $defaultName = 'backup-manager:restore';
-
-    /**
-     * @var Manager
-     */
-    private $manager;
-
-    /**
-     *
-     * @param Manager $manager
-     */
-    public function __construct(Manager $manager)
+    public function __construct(private readonly Manager $manager)
     {
-        $this->manager = $manager;
         parent::__construct();
     }
 
-
+    #[\Override]
     protected function configure(): void
     {
         $this
-            ->setName(self::$defaultName)
-            ->setDescription('Restore form backup.')
-            ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to backup?')
+            ->addArgument('database', InputArgument::REQUIRED, 'What database configuration do you want to restore to?')
             ->addArgument('destination', InputArgument::REQUIRED, 'What storage do you want to restore from?')
             ->addArgument('file_path', InputArgument::REQUIRED, 'Where on the storage is the file?')
-            ->addOption('compression', 'c', InputOption::VALUE_OPTIONAL, 'What file compression is used?', 'null')
-        ;
+            ->addOption('compression', 'c', InputOption::VALUE_OPTIONAL, 'What file compression is used?', 'null');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->manager->makeRestore()->run(
             $input->getArgument('destination'),
             $input->getArgument('file_path'),
             $input->getArgument('database'),
-            $input->getOption('compression')
+            self::compression($input)
         );
 
-        return 0;
+        return Command::SUCCESS;
     }
 
+    /**
+     * "-c" without a value means no compression.
+     */
+    private static function compression(InputInterface $input): string
+    {
+        $compression = $input->getOption('compression');
+
+        return is_string($compression) && $compression !== '' ? $compression : 'null';
+    }
 }

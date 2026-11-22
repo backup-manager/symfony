@@ -9,7 +9,7 @@ class ConfigFactoryTest extends TestCase
 {
     public function testDsnConfig(): void
     {
-        $config = ConfigFactory::createConfig(['acme'=>['dsn'=> 'mysql://user:pass@server:3306/database']]);
+        $config = ConfigFactory::createConfig(['acme' => ['dsn' => 'mysql://user:pass@server:3306/database']]);
         $this->assertEquals('mysql', $config->get('acme', 'type'));
         $this->assertEquals('server', $config->get('acme', 'host'));
         $this->assertEquals('3306', $config->get('acme', 'port'));

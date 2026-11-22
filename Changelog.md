@@ -2,6 +2,34 @@
 
 ## UNRELEASED
 
+## 4.0.0
+
+Requires PHP 8.2, Symfony 6.4, 7.4 or 8.1+, and backup-manager 4.1. See
+[UPGRADE.md](UPGRADE.md).
+
+### Changed
+
+- Requires `backup-manager/backup-manager` ^4.1 (Flysystem 3), PHP 8.2+, and
+  Symfony components at releases patched for known advisories (6.4.50+,
+  7.4.23+, 8.1.11+). Symfony 5.4 stays on 3.x.
+- `BMBackupManagerExtension` extends the DependencyInjection component's
+  `Extension`, avoiding the Symfony 8.1 deprecation of the HttpKernel one.
+- Classes are `final` (except the bundle), with native types and
+  `strict_types`; PHPStan level 8, Psalm level 2 and PHP-CS-Fixer run in CI.
+- The `Dropbox` storage type accepts only `token` and `root`; the Gcs, Sftp,
+  Ftp and Webdav types accept every key the core library reads.
+- `--compression` without a value means no compression; the `--filename`
+  shortcut `name`, which Symfony could not parse, is removed.
+- `type: pdo_mysql` databases may use the MySQL-only options; the
+  MySQL-only error names the database and key. Invalid storage keys are
+  reported correctly (the message listed the allowed keys as invalid).
+
+### Removed
+
+- The `B2`, `Rackspace` and `DropboxV2` storage types and their services,
+  removed from core 4.0.
+
+
 ## 3.3.0
 
 ### Added
@@ -14,13 +42,17 @@
 - MySQL options `onlyTables`, `columnStatistics` and `socket`; AwsS3 option
   `use_path_style_endpoint`; Gcs option `root`.
 - Option `extraParams` for database configs (#82).
-- Tests on GitHub Actions for Symfony 3.4 to 8 and PHP 7.4 to 8.5.
+- Tests on GitHub Actions for Symfony 5.4 to 8 and PHP 7.4 to 8.5.
 
 ### Changed
 
-- Requires `backup-manager/backup-manager` ^3.3 and PHP 7.4+;
-  `symfony/process` requires a release patched for CVE-2024-51736 and
-  CVE-2026-24739.
+- Requires `backup-manager/backup-manager` ^3.3 and PHP 7.4+.
+- Symfony components require releases patched for their known advisories:
+  5.4.56+, 6.4.50+, 7.4.23+ or 8.1.11+ (`framework-bundle` 5.4.54+, 6.4.49+;
+  CVE-2026-123824, CVE-2026-123339, CVE-2026-123792, CVE-2026-121619 and
+  others), and `symfony/process` releases patched for CVE-2024-51736 and
+  CVE-2026-24739. Symfony 3.4 and 4.4 have no patched releases and are no
+  longer accepted; stay on 3.2.1 or upgrade Symfony.
 - A storage type whose adapter package is missing is reported by the core
   library when the storage is used (naming the package for the installed
   Flysystem version), instead of by this bundle when the container is built.

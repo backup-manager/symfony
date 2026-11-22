@@ -4,7 +4,7 @@ BackupManagerBundle
 [![Tests](https://github.com/backup-manager/symfony/actions/workflows/tests.yml/badge.svg)](https://github.com/backup-manager/symfony/actions/workflows/tests.yml)
 [![Latest Version](https://img.shields.io/packagist/v/backup-manager/symfony)](https://packagist.org/packages/backup-manager/symfony)
 [![PHP Version](https://img.shields.io/packagist/dependency-v/backup-manager/symfony/php)](https://packagist.org/packages/backup-manager/symfony)
-[![Symfony](https://img.shields.io/badge/Symfony-5.4%20%7C%206.4%20%7C%207.4%20%7C%208-000000?logo=symfony&logoColor=white)](#requirements)
+[![Symfony](https://img.shields.io/badge/Symfony-6.4%20%7C%207.4%20%7C%208-000000?logo=symfony&logoColor=white)](#requirements)
 [![Downloads](https://img.shields.io/packagist/dt/backup-manager/symfony)](https://packagist.org/packages/backup-manager/symfony/stats)
 [![License](https://img.shields.io/packagist/l/backup-manager/symfony)](LICENSE)
 
@@ -204,16 +204,15 @@ php bin/console backup-manager:restore development s3 test/backup.sql.gz -c gzip
 Requirements
 ============
 
-- PHP 7.4+
-- Symfony 5.4, 6.4, 7.4 or 8 (3.4 and 4.4 still install but are past end of
-  life). CI tests each.
+- PHP 8.2+
+- Symfony 6.4, 7.4 or 8.1+, at releases patched for known security
+  advisories. CI tests each. For Symfony 5.4 or PHP 7.4–8.1 use version 3.x.
 - The Flysystem adapter package for each storage type you use, for example
   `league/flysystem-aws-s3-v3` for `AwsS3`; see the
-  [core adapter table](https://github.com/backup-manager/backup-manager/tree/3.x#installation).
+  [core adapter table](https://github.com/backup-manager/backup-manager#installation).
   A missing package is reported, with the package name, when the storage is
   used.
-- The `B2`, `Rackspace` and `DropboxV2` types only work with Flysystem 1 and
-  are deprecated.
+- Upgrading from 3.x: see [UPGRADE.md](UPGRADE.md).
 - MySQL support requires `mysqldump` and `mysql` command-line binaries
 - PostgreSQL support requires `pg_dump` and `psql` command-line binaries
 - Gzip support requires `gzip` and `gunzip` command-line binaries

@@ -22,32 +22,34 @@ class ConfigurationTest extends TestCase
 
     public function testIgnoreTablesGeneratesErrorWhenNotUsingMySQL(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
-                            'ignoreTables'=>['xx', 'yy']
+                            'ignoreTables' => ['xx', 'yy']
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
                 ]
             ),
-            'are only valid on MySQL databases.'
+            'only valid on MySQL databases; database "dev" has "ignoreTables"'
         );
     }
 
     public function testIgnoreTablesDoesNothingWhenOmitted(): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -58,36 +60,38 @@ class ConfigurationTest extends TestCase
 
     public function testSslGeneratesErrorWhenNotUsingMySQL(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                             'ssl' => true,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
                 ]
             ),
-            'are only valid on MySQL databases.'
+            'only valid on MySQL databases; database "dev" has "ssl"'
         );
     }
 
     public function testSslOnValid(): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                         ],
-                        'test'=>[
+                        'test' => [
                             'type' => 'bar',
                             'ssl' => false,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                             'ssl' => true,
                         ],
@@ -99,36 +103,38 @@ class ConfigurationTest extends TestCase
 
     public function testSingleTransactionGeneratesErrorWhenNotUsingMySQL(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                             'singleTransaction' => true,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
                 ]
             ),
-            'are only valid on MySQL databases.'
+            'only valid on MySQL databases; database "dev" has "singleTransaction"'
         );
     }
 
     public function testSingleTransactionOnValid(): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                         ],
-                        'test'=>[
+                        'test' => [
                             'type' => 'bar',
                             'singleTransaction' => false,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -139,10 +145,11 @@ class ConfigurationTest extends TestCase
 
     public function testNoType(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
 
                         ],
                     ],
@@ -159,10 +166,11 @@ class ConfigurationTest extends TestCase
     #[DataProvider('validStorageTypes')]
     public function testStorageTypes(string $type): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'mysql'
                         ],
                     ],
@@ -179,8 +187,52 @@ class ConfigurationTest extends TestCase
     public static function validStorageTypes(): array
     {
         return [
-            ['Local'], ['AwsS3'], ['AsyncAwsS3'], ['B2'], ['Rackspace'], ['Dropbox'], ['DropboxV2'], ['Ftp'], ['Sftp'], ['Gcs'], ['Webdav'],
+            ['Local'], ['AwsS3'], ['AsyncAwsS3'], ['Dropbox'], ['Ftp'], ['Sftp'], ['Gcs'], ['Webdav'],
         ];
+    }
+
+    /**
+     * @dataProvider fullStorageConfigs
+     */
+    #[DataProvider('fullStorageConfigs')]
+    public function testEveryKeyTheCoreLibraryReadsIsAccepted(array $storage): void
+    {
+        $this->assertConfigurationIsValid([['storage' => ['s' => $storage]]]);
+    }
+
+    public static function fullStorageConfigs(): array
+    {
+        return [
+            'Local' => [['type' => 'Local', 'root' => '/backups']],
+            'AwsS3' => [['type' => 'AwsS3', 'key' => 'k', 'secret' => 's', 'region' => 'r', 'version' => 'latest', 'bucket' => 'b', 'root' => '', 'endpoint' => 'https://s3.example', 'use_path_style_endpoint' => true]],
+            'AsyncAwsS3' => [['type' => 'AsyncAwsS3', 'key' => 'k', 'secret' => 's', 'region' => 'r', 'bucket' => 'b', 'root' => '', 'endpoint' => 'https://s3.example', 'use_path_style_endpoint' => true]],
+            'Dropbox' => [['type' => 'Dropbox', 'token' => 't', 'root' => '']],
+            'Ftp' => [['type' => 'Ftp', 'host' => 'h', 'username' => 'u', 'password' => 'p', 'root' => '', 'port' => 21, 'passive' => true, 'ssl' => true, 'timeout' => 30, 'utf8' => true, 'transferMode' => 2, 'systemType' => 'unix', 'ignorePassiveAddress' => true, 'timestampsOnUnixListingsEnabled' => true, 'recurseManually' => true]],
+            'Sftp' => [['type' => 'Sftp', 'host' => 'h', 'username' => 'u', 'password' => 'p', 'root' => '', 'port' => 22, 'timeout' => 10, 'privateKey' => 'k', 'passphrase' => 'x', 'useAgent' => true, 'maxTries' => 3, 'hostFingerprint' => 'f']],
+            'Gcs (core sample)' => [['type' => 'Gcs', 'keyFilePath' => '', 'projectId' => '', 'bucket' => '', 'root' => '']],
+            'Gcs' => [['type' => 'Gcs', 'project' => 'p', 'keyFilePath' => '', 'bucket' => 'b', 'prefix' => 'x']],
+            'Webdav' => [['type' => 'Webdav', 'baseUri' => 'https://dav.example', 'userName' => 'u', 'password' => 'p', 'prefix' => '', 'authType' => 1, 'proxy' => 'http://proxy', 'encoding' => 1]],
+        ];
+    }
+
+    public function testPdoMysqlMayUseTheMysqlOnlyOptions(): void
+    {
+        $this->assertConfigurationIsValid([['database' => ['dev' => ['type' => 'pdo_mysql', 'singleTransaction' => true, 'socket' => '/s']]]]);
+    }
+
+    public function testTypesRemovedFromTheCoreLibraryAreRejected(): void
+    {
+        foreach (['B2', 'Rackspace', 'DropboxV2'] as $type) {
+            $this->assertConfigurationIsInvalid([['storage' => ['old' => ['type' => $type]]]], 'Type must be one of');
+        }
+    }
+
+    public function testAnUnknownStorageKeyIsNamedInTheError(): void
+    {
+        $this->assertConfigurationIsInvalid(
+            [['storage' => ['box' => ['type' => 'Dropbox', 'token' => 't', 'app' => 'x']]]],
+            'Storage type "Dropbox" received invalid key "app"'
+        );
     }
 
     public function testMysqlOnlyOptionsAreValidOnMysql(): void
@@ -200,7 +252,7 @@ class ConfigurationTest extends TestCase
         foreach ([['onlyTables' => ['users']], ['columnStatistics' => false], ['socket' => '/tmp/s']] as $option) {
             $this->assertConfigurationIsInvalid(
                 [['database' => ['dev' => ['type' => 'postgresql'] + $option]]],
-                'only valid on MySQL databases'
+                'are only valid on MySQL databases; database "dev" has "' . array_key_first($option) . '"'
             );
         }
     }

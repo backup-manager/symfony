@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="2"
+    findUnusedCode="false"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <file name="BMBackupManagerBundle.php" />
+        <directory name="Command" />
+        <directory name="DependencyInjection" />
+        <directory name="Factory" />
+    </projectFiles>
+    <issueHandlers>
+        <!-- The bundle class stays extensible by design. -->
+        <ClassMustBeFinal errorLevel="suppress"/>
+        <!-- Symfony 8.1 deprecates the HttpKernel BundleInterface, which its own
+             Bundle base class still implements; there is no replacement base
+             class that works on Symfony 6.4 to 8. -->
+        <DeprecatedInterface>
+            <errorLevel type="suppress">
+                <file name="BMBackupManagerBundle.php" />
+            </errorLevel>
+        </DeprecatedInterface>
+    </issueHandlers>
+</psalm>
