@@ -16,5 +16,13 @@
     <issueHandlers>
         <!-- The bundle class stays extensible by design. -->
         <ClassMustBeFinal errorLevel="suppress"/>
+        <!-- Symfony 8.1 deprecates the HttpKernel BundleInterface, which its own
+             Bundle base class still implements; there is no replacement base
+             class that works on Symfony 6.4 to 8. -->
+        <DeprecatedInterface>
+            <errorLevel type="suppress">
+                <file name="BMBackupManagerBundle.php" />
+            </errorLevel>
+        </DeprecatedInterface>
     </issueHandlers>
 </psalm>

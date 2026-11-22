@@ -45,13 +45,13 @@ final class BackupCommand extends Command
         }
 
         $destinations = [];
-        foreach ((array) $input->getArgument('destinations') as $name) {
-            $destinations[] = new Destination((string) $name, $filename);
+        foreach ($input->getArgument('destinations') as $name) {
+            $destinations[] = new Destination($name, $filename);
         }
 
         $compression = $input->getOption('compression');
         $this->manager->makeBackup()->run(
-            (string) $input->getArgument('database'),
+            $input->getArgument('database'),
             $destinations,
             is_string($compression) ? $compression : null
         );

@@ -22,14 +22,15 @@ class ConfigurationTest extends TestCase
 
     public function testIgnoreTablesGeneratesErrorWhenNotUsingMySQL(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
-                            'ignoreTables'=>['xx', 'yy']
+                            'ignoreTables' => ['xx', 'yy']
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -41,13 +42,14 @@ class ConfigurationTest extends TestCase
 
     public function testIgnoreTablesDoesNothingWhenOmitted(): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -58,14 +60,15 @@ class ConfigurationTest extends TestCase
 
     public function testSslGeneratesErrorWhenNotUsingMySQL(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                             'ssl' => true,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -77,17 +80,18 @@ class ConfigurationTest extends TestCase
 
     public function testSslOnValid(): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                         ],
-                        'test'=>[
+                        'test' => [
                             'type' => 'bar',
                             'ssl' => false,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                             'ssl' => true,
                         ],
@@ -99,14 +103,15 @@ class ConfigurationTest extends TestCase
 
     public function testSingleTransactionGeneratesErrorWhenNotUsingMySQL(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                             'singleTransaction' => true,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -118,17 +123,18 @@ class ConfigurationTest extends TestCase
 
     public function testSingleTransactionOnValid(): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'foo',
                         ],
-                        'test'=>[
+                        'test' => [
                             'type' => 'bar',
                             'singleTransaction' => false,
                         ],
-                        'prod'=>[
+                        'prod' => [
                             'type' => 'mysql',
                         ],
                     ],
@@ -139,10 +145,11 @@ class ConfigurationTest extends TestCase
 
     public function testNoType(): void
     {
-        $this->assertConfigurationIsInvalid(array(
+        $this->assertConfigurationIsInvalid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
 
                         ],
                     ],
@@ -159,10 +166,11 @@ class ConfigurationTest extends TestCase
     #[DataProvider('validStorageTypes')]
     public function testStorageTypes(string $type): void
     {
-        $this->assertConfigurationIsValid(array(
+        $this->assertConfigurationIsValid(
+            array(
                 [
-                    'database'=>[
-                        'dev'=>[
+                    'database' => [
+                        'dev' => [
                             'type' => 'mysql'
                         ],
                     ],

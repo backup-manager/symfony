@@ -21,8 +21,8 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
 
     public function testReplacementOfConfig(): void
     {
-        $storageConfig = ['local'=>['type'=>'Local', 'root'=>'/foo']];
-        $dbConfig = ['dev'=>['type'=>'mysql']];
+        $storageConfig = ['local' => ['type' => 'Local', 'root' => '/foo']];
+        $dbConfig = ['dev' => ['type' => 'mysql']];
 
         $this->load([
             'storage' => $storageConfig,
@@ -38,8 +38,8 @@ class BMBackupManagerExtensionTest extends AbstractExtensionTestCase
      */
     public function testCustomConfigNames(): void
     {
-        $storageConfig = ['foobar'=>['type'=>'Ftp', 'host' => 'foo', 'password' =>'xx', 'username'=>'x']];
-        $dbConfig = ['dev'=>['type'=>'mysql']];
+        $storageConfig = ['foobar' => ['type' => 'Ftp', 'host' => 'foo', 'password' => 'xx', 'username' => 'x']];
+        $dbConfig = ['dev' => ['type' => 'mysql']];
 
         $this->load([
             'storage' => $storageConfig,

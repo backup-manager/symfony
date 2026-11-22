@@ -38,9 +38,9 @@ final class RestoreCommand extends Command
     {
         $compression = $input->getOption('compression');
         $this->manager->makeRestore()->run(
-            (string) $input->getArgument('destination'),
-            (string) $input->getArgument('file_path'),
-            (string) $input->getArgument('database'),
+            $input->getArgument('destination'),
+            $input->getArgument('file_path'),
+            $input->getArgument('database'),
             is_string($compression) ? $compression : null
         );
 
